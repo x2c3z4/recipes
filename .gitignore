@@ -1,0 +1,5 @@
+/build64_release
+/blade-bin
+.*
+!.gitignore
+
