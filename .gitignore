@@ -1,4 +1,5 @@
 /build64_release
+/build64_debug
 /blade-bin
 .*
 !.gitignore

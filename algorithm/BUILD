@@ -1,4 +1,4 @@
 cc_binary(
-    name = "main",
-    srcs = "main.cc",
+    name = "soduku",
+    srcs = "soduku.cc",
 )
