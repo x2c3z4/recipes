@@ -1,5 +1,7 @@
 /build64_release
 /build64_debug
+/build32_release
+/build32_debug
 /blade-bin
 
 .*
