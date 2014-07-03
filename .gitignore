@@ -1,6 +1,13 @@
 /build64_release
 /build64_debug
 /blade-bin
+
 .*
 !.gitignore
+*.pyc
+
+cscope.files
+cscope.out
+cscope.in.out
+cscope.po.out
 

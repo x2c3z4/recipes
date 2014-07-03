@@ -10,22 +10,19 @@ int nspaces;
 int neighhbors[N][NEIGHBOR];
 
 void init_neighbors() {
-  int index = 0;
-  for(int i=0; i < N; i++) {
-    // row
-    int row = i % NUM;
+  for(int i = 0; i < N; i++) {
+    int index = 0;
+    // row,col
+    int row = i / NUM;
+    int col = i % NUM;
     for(int j = 0; j < NUM; j++) {
-      int label = row * NUM + j;
-      if ( label != i ) {
-        neighhbors[i][index++] = label;
+      int label_x = row * NUM + j;
+      int label_y = j * NUM + col;
+      if ( label_x != i) {
+        neighhbors[i][index++] = label_x;
       }
-    }
-    // col
-    int col = i / NUM;
-    for(int j=0; j < NUM; j++) {
-      int label = j * NUM + col;
-      if ( label != i ) {
-        neighhbors[i][index++] = label;
+      if ( label_y != i) {
+        neighhbors[i][index++] = label_y;
       }
     }
     // cube
@@ -41,16 +38,16 @@ void init_neighbors() {
         assert(index <= NEIGHBOR);
       }
     }
-
   }
 }
 
 void print_neighbors() {
   for(int i = 0; i < N; i++) {
-    printf("Cell[%d]: ",i);
+    printf("Cell[%d]: \n",i);
     for(int j =0; j < NEIGHBOR; j++) {
-      printf("%d",neighhbors[i][j]);
+      printf("%d, ",neighhbors[i][j]);
     }
+    printf("\n\n");
   }
 }
 
