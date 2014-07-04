@@ -6,6 +6,8 @@
 #include <stdio.h>
 #include <assert.h>
 #include <unistd.h>
+#include <string.h>
+#include <sys/time.h>
 
 const int NUM = 9;
 const int N = NUM * NUM;
@@ -98,19 +100,65 @@ void print_cwd() {
   printf("cwd: %s\n", buf);
 }
 
+void print_board(const char* des) {
+  printf("%s:\n", des);
+  for (int i = 0; i < NUM; i++) {
+    printf("\t%d %d %d | %d %d %d | %d %d %d\n",
+           board[i * NUM + 0],
+           board[i * NUM + 1],
+           board[i * NUM + 2],
+           board[i * NUM + 3],
+           board[i * NUM + 4],
+           board[i * NUM + 5],
+           board[i * NUM + 6],
+           board[i * NUM + 7],
+           board[i * NUM + 8]);
+    if ( i % 3 == 2 ) {
+      printf("\t---------------------\n");
+    }
+  }
+  printf("\n");
+}
 void init_board_with_file(const char* file) {
   FILE* f;
   f = fopen(file, "r");
   int x, y, v;
   assert(f != NULL);
+  memset(board, 0, sizeof(board));
   while (fscanf(f, "%d %d %d\n", &x, &y, &v) != EOF) {
-    printf("(%d,%d,%d)\n", x, y, v);
+    // printf("(%d,%d,%d)\n", x, y, v);
+    int index = (x - 1) * NUM + y - 1;
+    assert(index >= 0 && index < N);
+    board[index] = v;
   }
   fclose(f);
 }
 
+void init_spaces() {
+  nspaces = 0;
+  for (int i = 0; i < N; i++) {
+    if (board[i] == 0) {
+      spaces[nspaces++] = i;
+    }
+  }
+}
+double timeDelta(struct timeval *stop, struct timeval *start) {
+  return (stop->tv_sec - start->tv_sec) * 1000000 + (stop->tv_usec - start->tv_usec);
+}
+
 int main() {
-  init_neighbors();
-  init_board_with_file("test.dat");
+  struct timeval t0, t1;
+  gettimeofday(&t0,NULL);
+  for (int i = 0; i < 100; i++) {
+    init_neighbors();
+    init_board_with_file("test.dat");
+    print_board("init");
+    init_spaces();
+
+    solve(0);
+    print_board("result");
+  }
+  gettimeofday(&t1,NULL);
+  printf("Time: %f us\n",timeDelta(&t1, &t0) / 100);
   return 0;
 }
