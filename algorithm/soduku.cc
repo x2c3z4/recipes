@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2014  Feng,Li<lifeng1519@gmail.com>
+ * Copyright (c) 2014
+ * Author: Feng,Li (lifeng1519@gmail.com)
  */
 
 #include <stdio.h>
