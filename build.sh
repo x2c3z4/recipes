@@ -1,3 +1,8 @@
 #!/bin/bash
 source env.sh
-blade build -pdebug ...
+
+if [[ "$1" = "test" ]];then
+  blade test -pdebug ...
+else
+  blade build -pdebug ...
+fi

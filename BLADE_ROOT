@@ -1,0 +1,1 @@
+cc_config(cxxflags='-std=c++0x')
