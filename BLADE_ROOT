@@ -1,1 +1,4 @@
 cc_config(cxxflags='-std=c++0x')
+cc_test_config(
+    heap_check='strict',
+    )
