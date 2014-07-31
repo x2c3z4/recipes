@@ -3,20 +3,35 @@
  * Author: Feng,Li (lifeng1519@gmail.com)
  */
 
-// Don't include header here, otherwise gcc 4.6.2+ will report:
-// warning: 'weakref' attribute ignored because variable is initialized
-// #include "common/binary_version.h"
-
+#include <sstream>
 #include "binary_version.h"
+#include "thirdparty/gflags/gflags.h"
 
-extern "C" {
-namespace binary_version {
-__attribute__((weak)) extern const int kSvnInfoCount = 0;
-__attribute__((weak)) extern const char * const kSvnInfo[] = {0};
-__attribute__((weak)) extern const char kBuildType[] = "Unknown";
-__attribute__((weak)) extern const char kBuildTime[] = "Unknown";
-__attribute__((weak)) extern const char kBuilderName[] = "Unknown";
-__attribute__((weak)) extern const char kHostName[] = "Unknown";
-__attribute__((weak)) extern const char kCompiler[] = "Unknown";
-} // namespace binary_version
-} // extern "C"
+static std::string MakeVersionInfo()
+{
+    using namespace binary_version;
+
+    std::ostringstream oss;
+    oss << "\n"; // Open a new line in gflags --version output.
+
+    if (kSvnInfoCount > 0)
+    {
+        oss << "----------------------------------------------------------\n";
+        for (int i = 0; i < kSvnInfoCount; ++i)
+            oss << kSvnInfo[i];
+        oss << "----------------------------------------------------------\n";
+    }
+
+    oss << "BuildTime: " << kBuildTime << "\n"
+        << "BuildType: " << kBuildType << "\n"
+        << "BuilderName: " << kBuilderName << "\n"
+        << "HostName: " << kHostName << "\n"
+        << "Compiler: " << kCompiler << "\n";
+
+    return oss.str();
+}
+
+void InitVersionInfo()
+{
+    google::SetVersionString(MakeVersionInfo());
+}
