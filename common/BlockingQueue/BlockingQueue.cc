@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include "BlockingQueue.h"
 
-BlockingQueue::BlockingQueue(void **buffer):
+BlockingQueue::BlockingQueue(void** buffer):
   buffer(buffer),
   capacity(sizeof(buffer) / sizeof(buffer[0])),
   size(0),
@@ -30,8 +30,8 @@ void BlockingQueue::Enqueue(void* value) {
   }
   printf("enqueue %d\n", *(int*)value);
   buffer[in] = value;
-  ++ size;
-  ++ in;
+  ++size;
+  ++in;
   in %= capacity;
   /* leave critical area*/
   pthread_mutex_unlock(&(mutex));
@@ -46,20 +46,19 @@ void* BlockingQueue::Dequeue() {
   }
   void* value = buffer[out];
   printf("dequeue %d\n", *(int*)value);
-  -- size;
-  ++ out;
+  --size;
+  ++out;
   out %= capacity;
   /* leave critical area*/
   pthread_cond_broadcast(&(cond_full));
   pthread_mutex_unlock(&(mutex));
-  printf("leave dequeue\n");
   return value;
 }
 
 
 int BlockingQueue::Size() {
   pthread_mutex_lock(&mutex);
-  int size = size;
+  int size = this->size;
   pthread_mutex_unlock(&(mutex));
   return size;
 }
