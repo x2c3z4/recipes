@@ -1,11 +1,14 @@
 #include <string.h>
 
-#include <boost/shared_ptr.hpp>
+//#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include "Mutex.h"
 #include "BlockingQueue.h"
 
 #include "thirdparty/gtest/gtest.h"
+
+#define boost std
 typedef struct {
   char video[88];
 }Parcel;
