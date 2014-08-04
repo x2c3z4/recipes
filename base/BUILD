@@ -2,3 +2,7 @@ cc_test(
         name="test_BlockingQueue",
         srcs="test_BlockingQueue.cc"
         )
+cc_library(
+    name="base",
+    srcs="Timers.cpp",
+    )
