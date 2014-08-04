@@ -6,10 +6,10 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include <string.h>
-#include "BlockingQueue.h"
 
 #include "thirdparty/gtest/gtest.h"
 
+#include "blocking_queue.h"
 typedef struct {
   char video[88];
 } Parcel;

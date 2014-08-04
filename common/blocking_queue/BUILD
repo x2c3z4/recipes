@@ -1,13 +1,13 @@
 cc_library(
     name = 'blocking_queue',
     srcs = [
-    'BlockingQueue.cc',
+    'blocking_queue.cc',
     ],
     )
 cc_test(
     name = 'test_blocking_queue',
     srcs = [
-    'test_BlockingQueue.cc',
+    'test_blocking_queue.cc',
     ],
     deps = [
     ":blocking_queue",

@@ -5,7 +5,7 @@
 #include <pthread.h>
 #include <semaphore.h>
 #include <stdio.h>
-#include "BlockingQueue.h"
+#include "blocking_queue.h"
 
 BlockingQueue::BlockingQueue(void** buffer):
   buffer(buffer),
@@ -28,6 +28,7 @@ void BlockingQueue::Enqueue(void* value) {
   while (size == capacity) {
     pthread_cond_wait(&(cond_full), &(mutex));
   }
+  printf("size:%d, capacity:%d\n",size,capacity);
   printf("enqueue %d\n", *(int*)value);
   buffer[in] = value;
   ++size;
