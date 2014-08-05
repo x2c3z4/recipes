@@ -12,3 +12,10 @@ cc_test(
     "//thirdparty/gtest:gtest_main",
     ],
     )
+cc_test(
+    name = "max_points_on_line",
+    srcs = "max_points_on_line.cc",
+    deps = [
+    "//thirdparty/gtest:gtest_main",
+    ],
+    )
