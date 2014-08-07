@@ -19,3 +19,10 @@ cc_test(
     "//thirdparty/gtest:gtest_main",
     ],
     )
+cc_test(
+    name = "sort-list",
+    srcs = "sort-list.cc",
+    deps = [
+    "//thirdparty/gtest:gtest_main",
+    ],
+    )
