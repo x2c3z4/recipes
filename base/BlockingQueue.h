@@ -1,16 +1,16 @@
-// Use of this source code is governed by a BSD-style license
-// that can be found in the License file.
-//
-// Author: Shuo Chen (chenshuo at chenshuo dot com)
+/*
+ * Copyright (c) 2014
+ * Author: Feng,Li (lifeng1519@gmail.com)
+ */
 
-#ifndef MUDUO_BASE_BLOCKINGQUEUE_H
-#define MUDUO_BASE_BLOCKINGQUEUE_H
-
-#include "Condition.h"
-#include "Mutex.h"
+#ifndef BASE_BLOCKINGQUEUE_H_
+#define BASE_BLOCKINGQUEUE_H_
 
 #include <deque>
 #include <assert.h>
+
+#include "Condition.h"
+#include "Mutex.h"
 
 namespace base
 {
@@ -62,4 +62,4 @@ class BlockingQueue
 
 }
 
-#endif  // MUDUO_BASE_BLOCKINGQUEUE_H
+#endif  // BASE_BLOCKINGQUEUE_H_

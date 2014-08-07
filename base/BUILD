@@ -4,5 +4,7 @@ cc_test(
         )
 cc_library(
     name="base",
-    srcs="Timers.cpp",
-    )
+    srcs=[
+    "Timers.cpp",
+    "Looper.cc",
+    ])
