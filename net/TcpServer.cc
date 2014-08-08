@@ -1,13 +1,19 @@
 #include "TcpServer.h"
 
+#include "base/Looper.h"
 
-namespace net{
-using namespace base;
+namespace net {
+TcpServer::TcpServer(int port):
+  port_(port){
+}
 TcpServer::TcpServer():
-  {
-
+  port_(8888) {
   }
-TcpServer::~TcpServer(){
-}
+
+void TcpServer::start() {
 
 }
+TcpServer::~TcpServer() {
+}
+
+} // namespace net

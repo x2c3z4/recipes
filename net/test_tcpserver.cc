@@ -8,15 +8,18 @@
 
 #include "thirdparty/gtest/gtest.h"
 
-#include "Looper.h"
-#include "Thread.h"
+#include "base/Looper.h"
+#include "base/Thread.h"
+
+#include "net/TcpServer.h"
+
+using namespace net;
+using namespace base;
 
 void readMessage() {
   printf("read done!\n");
 }
 
-using namespace net;
-using namespace base;
 TEST(TcpServer, listen) {
   Looper loop;
   TcpServer server(8000);

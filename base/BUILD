@@ -7,8 +7,8 @@ cc_library(
     ])
 
 cc_test(
-        name="test_BlockingQueue",
-        srcs="test_BlockingQueue.cc"
+        name="test_blockingqueue",
+        srcs="test_blockingqueue.cc"
         )
 cc_test(
         name="test_vector",

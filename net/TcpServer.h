@@ -1,17 +1,23 @@
 #ifndef NET_TCPSERVER_H_
-#ifndef NET_TCPSERVER_H_
-namespace net {
+#define NET_TCPSERVER_H_
 
-class base::Looper;
-class base::ThreadPool;
+#include "base/Looper.h"
+
+namespace net {
+// class base::ThreadPool;
 
 class TcpServer {
-  public:
-  explict TcpServer();
+public:
+  TcpServer();
+  explicit TcpServer(int port);
   ~TcpServer();
-  private:
-  base::Looper *loop_; // listen sock
-  //base::ThreadPool *pool_;
+
+
+  void start();
+private:
+  base::Looper* loop_; // listen sock
+  int port_;
+  // base::ThreadPool *pool_;
 };
-}
+} // namespace net
 #endif

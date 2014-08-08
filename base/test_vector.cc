@@ -7,7 +7,7 @@
 
 TEST(vector,assginAt) {
   std::vector<std::string> v(101);
-  printf("size = %lu\n", v.size());
+  printf("size = %zu\n", v.size());
   v[100] = "a";
-  printf("size = %lu\n", v.size());
+  printf("size = %zu\n", v.size());
 }
