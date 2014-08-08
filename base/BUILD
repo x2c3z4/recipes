@@ -3,6 +3,7 @@ cc_library(
     srcs=[
     "Timers.cpp",
     "Looper.cc",
+    "Thread.cc",
     ])
 
 cc_test(
@@ -16,6 +17,13 @@ cc_test(
 cc_test(
         name="test_looper",
         srcs="test_looper.cc",
+        deps = [
+        ":base",
+        ]
+        )
+cc_test(
+        name="test_thread",
+        srcs="test_thread.cc",
         deps = [
         ":base",
         ]

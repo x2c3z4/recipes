@@ -1,11 +1,13 @@
 #ifndef BASE_LOOPER_H_
 #define BASE_LOOPER_H_
 
+#include <pthread.h>
+#include <sys/epoll.h>
+
 #include <vector>
 #include <functional>
 
-#include <pthread.h>
-#include <sys/epoll.h>
+#include <boost/function.hpp>
 
 #include "Mutex.h"
 
@@ -24,7 +26,7 @@ namespace base {
 #define AE_DONT_WAIT 4
 
 #define AE_NOMORE -1
-typedef std::function<void ()> Functor;
+typedef boost::function<void ()> Functor;
 
 class FileEvent {
  public:

@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      http:// www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,37 +26,38 @@ namespace base {
 typedef int32_t     status_t;
 
 /*
- * Error codes. 
+ * Error codes.
  * All error codes are negative values.
  */
 
 // Win32 #defines NO_ERROR as well.  It has the same value, so there's no
 enum {
-    OK                = 0,    // Everything's swell.
+  OK                = 0,    // Everything's swell.
+  NO_ERROR          = 0,    // No errors.
 
-    UNKNOWN_ERROR       = (-2147483647-1), // INT32_MIN value
+  UNKNOWN_ERROR       = (-2147483647 - 1), // INT32_MIN value
 
-    NO_MEMORY           = -ENOMEM,
-    INVALID_OPERATION   = -ENOSYS,
-    BAD_VALUE           = -EINVAL,
-    BAD_TYPE            = (UNKNOWN_ERROR + 1),
-    NAME_NOT_FOUND      = -ENOENT,
-    PERMISSION_DENIED   = -EPERM,
-    NO_INIT             = -ENODEV,
-    ALREADY_EXISTS      = -EEXIST,
-    DEAD_OBJECT         = -EPIPE,
-    FAILED_TRANSACTION  = (UNKNOWN_ERROR + 2),
-    JPARKS_BROKE_IT     = -EPIPE,
-    BAD_INDEX           = -EOVERFLOW,
-    NOT_ENOUGH_DATA     = -ENODATA,
-    WOULD_BLOCK         = -EWOULDBLOCK,
-    TIMED_OUT           = -ETIMEDOUT,
-    UNKNOWN_TRANSACTION = -EBADMSG,
-    FDS_NOT_ALLOWED     = (UNKNOWN_ERROR + 7),
+  NO_MEMORY           = -ENOMEM,
+  INVALID_OPERATION   = -ENOSYS,
+  BAD_VALUE           = -EINVAL,
+  BAD_TYPE            = (UNKNOWN_ERROR + 1),
+  NAME_NOT_FOUND      = -ENOENT,
+  PERMISSION_DENIED   = -EPERM,
+  NO_INIT             = -ENODEV,
+  ALREADY_EXISTS      = -EEXIST,
+  DEAD_OBJECT         = -EPIPE,
+  FAILED_TRANSACTION  = (UNKNOWN_ERROR + 2),
+  JPARKS_BROKE_IT     = -EPIPE,
+  BAD_INDEX           = -EOVERFLOW,
+  NOT_ENOUGH_DATA     = -ENODATA,
+  WOULD_BLOCK         = -EWOULDBLOCK,
+  TIMED_OUT           = -ETIMEDOUT,
+  UNKNOWN_TRANSACTION = -EBADMSG,
+  FDS_NOT_ALLOWED     = (UNKNOWN_ERROR + 7),
 };
 
 }; // namespace base
-    
+
 // ---------------------------------------------------------------------------
-    
+
 #endif // ANDROID_ERRORS_H

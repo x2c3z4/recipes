@@ -16,6 +16,7 @@ namespace base{
   }
 
   int Looper::createFileEvent(int fd, int mask, const Functor& func, void* clientData) {
+    printf("add fd %d mask %d\n",fd, mask);
     if (mask & AE_READABLE) fileEvents_[fd].rfileProc = func;
     if (mask & AE_WRITABLE) fileEvents_[fd].wfileProc = func;
     fileEvents_[fd].clientData = clientData;
@@ -36,6 +37,7 @@ namespace base{
     return 0;
   }
   void Looper::removeFileEvent(int fd, int delmask) {
+    printf("rm fd %d mask %d\n",fd, delmask);
     struct epoll_event ee;
     int mask = fileEvents_[fd].mask & (~delmask);
     ee.events = 0;
