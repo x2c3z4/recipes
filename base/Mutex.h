@@ -41,7 +41,7 @@ class Condition;
  * recursive, i.e. the same thread can't lock it multiple times.
  */
 class Mutex {
- public:
+public:
   enum {
     PRIVATE = 0,
     SHARED = 1
@@ -75,7 +75,7 @@ class Mutex {
     Mutex& mLock;
   };
 
- private:
+private:
   friend class Condition;
   // A mutex cannot be copied
   Mutex(const Mutex&);

@@ -21,8 +21,8 @@ namespace base {
 typedef boost::function<bool ()> LoopFunc;
 typedef pthread_t thread_id_t;
 class Thread {
- public:
-  Thread(const LoopFunc &);
+public:
+  Thread(const LoopFunc&);
   virtual             ~Thread();
   status_t    run();
   // Ask this object's thread to exit. This function is asynchronous, when the
@@ -47,10 +47,10 @@ class Thread {
   // androidGetTid(), or -1 if the thread is not running.
   pid_t       getTid() const;
   LoopFunc        mThreadLoop;
- protected:
+protected:
   // exitPending() returns true if requestExit() has been called.
   bool        exitPending() const;
- private:
+private:
   // Derived class must implement threadLoop(). The thread starts its life
   // here. There are two ways of using the Thread object:
   // 1) loop: if threadLoop() returns true, it will be called again if
@@ -58,7 +58,7 @@ class Thread {
   // 2) once: if threadLoop() returns false, the thread will exit upon return.
   int _createThread(thread_id_t* threadId);
 
- private:
+private:
   Thread& operator=(const Thread&);
   static void*            _threadLoop(void* user);
   // always hold mLock when reading or writing

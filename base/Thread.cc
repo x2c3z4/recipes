@@ -31,7 +31,7 @@ namespace base {
  * This is our thread object!
  */
 
-Thread::Thread(const LoopFunc &func)
+Thread::Thread(const LoopFunc& func)
   : mThreadLoop(func),
     mThread(thread_id_t(-1)),
     mStatus(NO_ERROR),
@@ -157,7 +157,7 @@ int Thread::_createThread(thread_id_t* threadId) {
   pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
   errno = 0;
   pthread_t thread;
-  int result = pthread_create(&thread, &attr,Thread::_threadLoop, this);
+  int result = pthread_create(&thread, &attr, Thread::_threadLoop, this);
   pthread_attr_destroy(&attr);
   if (result != 0) {
     printf("createThread failed (res=%d, errno=%d)\n", result, errno);

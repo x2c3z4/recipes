@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      http:// www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -30,10 +30,10 @@ namespace android {
  * Whiten(Mix(Mix(Mix(0, A), B), C)) */
 
 inline uint32_t JenkinsHashMix(uint32_t hash, uint32_t data) {
-    hash += data;
-    hash += (hash << 10);
-    hash ^= (hash >> 6);
-    return hash;
+  hash += data;
+  hash += (hash << 10);
+  hash ^= (hash >> 6);
+  return hash;
 }
 
 hash_t JenkinsHashWhiten(uint32_t hash);

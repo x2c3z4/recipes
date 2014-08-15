@@ -38,58 +38,60 @@ namespace android {
  */
 class LinearAllocator {
 public:
-    LinearAllocator();
-    ~LinearAllocator();
+  LinearAllocator();
+  ~LinearAllocator();
 
-    /**
-     * Reserves and returns a region of memory of at least size 'size', aligning as needed.
-     * Typically this is used in an object's overridden new() method or as a replacement for malloc.
-     *
-     * The lifetime of the returned buffers is tied to that of the LinearAllocator. If calling
-     * delete() on an object stored in a buffer is needed, it should be overridden to use
-     * rewindIfLastAlloc()
-     */
-    void* alloc(size_t size);
+  /**
+   * Reserves and returns a region of memory of at least size 'size', aligning as needed.
+   * Typically this is used in an object's overridden new() method or as a replacement for malloc.
+   *
+   * The lifetime of the returned buffers is tied to that of the LinearAllocator. If calling
+   * delete() on an object stored in a buffer is needed, it should be overridden to use
+   * rewindIfLastAlloc()
+   */
+  void* alloc(size_t size);
 
-    /**
-     * Attempt to deallocate the given buffer, with the LinearAllocator attempting to rewind its
-     * state if possible. No destructors are called.
-     */
-    void rewindIfLastAlloc(void* ptr, size_t allocSize);
+  /**
+   * Attempt to deallocate the given buffer, with the LinearAllocator attempting to rewind its
+   * state if possible. No destructors are called.
+   */
+  void rewindIfLastAlloc(void* ptr, size_t allocSize);
 
-    /**
-     * Dump memory usage statistics to the log (allocated and wasted space)
-     */
-    void dumpMemoryStats(const char* prefix = "");
+  /**
+   * Dump memory usage statistics to the log (allocated and wasted space)
+   */
+  void dumpMemoryStats(const char* prefix = "");
 
-    /**
-     * The number of bytes used for buffers allocated in the LinearAllocator (does not count space
-     * wasted)
-     */
-    size_t usedSize() const { return mTotalAllocated - mWastedSpace; }
+  /**
+   * The number of bytes used for buffers allocated in the LinearAllocator (does not count space
+   * wasted)
+   */
+  size_t usedSize() const {
+    return mTotalAllocated - mWastedSpace;
+  }
 
 private:
-    LinearAllocator(const LinearAllocator& other);
+  LinearAllocator(const LinearAllocator& other);
 
-    class Page;
+  class Page;
 
-    Page* newPage(size_t pageSize);
-    bool fitsInCurrentPage(size_t size);
-    void ensureNext(size_t size);
-    void* start(Page *p);
-    void* end(Page* p);
+  Page* newPage(size_t pageSize);
+  bool fitsInCurrentPage(size_t size);
+  void ensureNext(size_t size);
+  void* start(Page* p);
+  void* end(Page* p);
 
-    size_t mPageSize;
-    size_t mMaxAllocSize;
-    void* mNext;
-    Page* mCurrentPage;
-    Page* mPages;
+  size_t mPageSize;
+  size_t mMaxAllocSize;
+  void* mNext;
+  Page* mCurrentPage;
+  Page* mPages;
 
-    // Memory usage tracking
-    size_t mTotalAllocated;
-    size_t mWastedSpace;
-    size_t mPageCount;
-    size_t mDedicatedPageCount;
+  // Memory usage tracking
+  size_t mTotalAllocated;
+  size_t mWastedSpace;
+  size_t mPageCount;
+  size_t mDedicatedPageCount;
 };
 
 }; // namespace android

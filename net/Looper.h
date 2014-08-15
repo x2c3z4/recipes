@@ -28,7 +28,7 @@ namespace net {
 typedef boost::function<void ()> Functor;
 
 class FileEvent {
- public:
+public:
   FileEvent():
     fd(-1) {
 
@@ -56,13 +56,13 @@ class FileEvent {
 };
 
 class Looper {
- public:
+public:
   explicit Looper();
   ~Looper();
   int createFileEvent(int fd, int mask, const Functor& func, void* clientData);
   void removeFileEvent(int fd, int mask);
   void loop();
- private:
+private:
   int processEvent_();
 
   int epollfd_;

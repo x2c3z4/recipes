@@ -10,12 +10,12 @@ namespace net {
 // class base::ThreadPool;
 
 class TcpServer {
- public:
+public:
   TcpServer(Looper* loop, int port = 8888);
   ~TcpServer();
 
   void start();
- private:
+private:
   void newConnection();
 
   Looper* loop_; // listen sock

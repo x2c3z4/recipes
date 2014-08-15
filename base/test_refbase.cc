@@ -3,21 +3,21 @@
 
 
 class RefTest : public base::Ref {
-  public:
-    RefTest(int32_t id) : mID(id) {
-      printf("RefTest ctor: %d\n", mID);
-    }
+public:
+  RefTest(int32_t id) : mID(id) {
+    printf("RefTest ctor: %d\n", mID);
+  }
 
-    virtual ~RefTest() {
-      printf("RefTest dtor: %d\n", mID);
-    }
+  virtual ~RefTest() {
+    printf("RefTest dtor: %d\n", mID);
+  }
 
-    int32_t id() const {
-      return mID;
-    }
+  int32_t id() const {
+    return mID;
+  }
 
-  private:
-    int32_t mID;
+private:
+  int32_t mID;
 };
 
 int main() {
@@ -33,7 +33,7 @@ int main() {
     printf("RefTest object is destroyed\n");
   } else {
     printf("RefTest object %d is still around\n",
-        ref4->id());
+           ref4->id());
   }
   ref4 = NULL;
 
@@ -43,7 +43,7 @@ int main() {
     printf("RefTest object is destroyed\n");
   } else {
     printf("RefTest object %d is still around\n",
-        ref4->id());
+           ref4->id());
   }
 
   return 0;

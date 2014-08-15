@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      http:// www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -46,89 +46,100 @@ namespace android {
  */
 class FileMap {
 public:
-    FileMap(void);
+  FileMap(void);
 
-    /*
-     * Create a new mapping on an open file.
-     *
-     * Closing the file descriptor does not unmap the pages, so we don't
-     * claim ownership of the fd.
-     *
-     * Returns "false" on failure.
-     */
-    bool create(const char* origFileName, int fd,
-                off64_t offset, size_t length, bool readOnly);
+  /*
+   * Create a new mapping on an open file.
+   *
+   * Closing the file descriptor does not unmap the pages, so we don't
+   * claim ownership of the fd.
+   *
+   * Returns "false" on failure.
+   */
+  bool create(const char* origFileName, int fd,
+              off64_t offset, size_t length, bool readOnly);
 
-    /*
-     * Return the name of the file this map came from, if known.
-     */
-    const char* getFileName(void) const { return mFileName; }
-    
-    /*
-     * Get a pointer to the piece of the file we requested.
-     */
-    void* getDataPtr(void) const { return mDataPtr; }
+  /*
+   * Return the name of the file this map came from, if known.
+   */
+  const char* getFileName(void) const {
+    return mFileName;
+  }
 
-    /*
-     * Get the length we requested.
-     */
-    size_t getDataLength(void) const { return mDataLength; }
+  /*
+   * Get a pointer to the piece of the file we requested.
+   */
+  void* getDataPtr(void) const {
+    return mDataPtr;
+  }
 
-    /*
-     * Get the data offset used to create this map.
-     */
-    off64_t getDataOffset(void) const { return mDataOffset; }
+  /*
+   * Get the length we requested.
+   */
+  size_t getDataLength(void) const {
+    return mDataLength;
+  }
 
-    /*
-     * Get a "copy" of the object.
-     */
-    FileMap* acquire(void) { mRefCount++; return this; }
+  /*
+   * Get the data offset used to create this map.
+   */
+  off64_t getDataOffset(void) const {
+    return mDataOffset;
+  }
 
-    /*
-     * Call this when mapping is no longer needed.
-     */
-    void release(void) {
-        if (--mRefCount <= 0)
-            delete this;
-    }
+  /*
+   * Get a "copy" of the object.
+   */
+  FileMap* acquire(void) {
+    mRefCount++;
+    return this;
+  }
 
-    /*
-     * This maps directly to madvise() values, but allows us to avoid
-     * including <sys/mman.h> everywhere.
-     */
-    enum MapAdvice {
-        NORMAL, RANDOM, SEQUENTIAL, WILLNEED, DONTNEED
-    };
+  /*
+   * Call this when mapping is no longer needed.
+   */
+  void release(void) {
+    if (--mRefCount <= 0)
+      delete this;
+  }
 
-    /*
-     * Apply an madvise() call to the entire file.
-     *
-     * Returns 0 on success, -1 on failure.
-     */
-    int advise(MapAdvice advice);
+  /*
+   * This maps directly to madvise() values, but allows us to avoid
+   * including <sys/mman.h> everywhere.
+   */
+  enum MapAdvice {
+    NORMAL, RANDOM, SEQUENTIAL, WILLNEED, DONTNEED
+  };
+
+  /*
+   * Apply an madvise() call to the entire file.
+   *
+   * Returns 0 on success, -1 on failure.
+   */
+  int advise(MapAdvice advice);
 
 protected:
-    // don't delete objects; call release()
-    ~FileMap(void);
+  // don't delete objects; call release()
+  ~FileMap(void);
 
 private:
-    // these are not implemented
-    FileMap(const FileMap& src);
-    const FileMap& operator=(const FileMap& src);
+  // these are not implemented
+  FileMap(const FileMap& src);
+  const FileMap& operator=(const FileMap& src);
 
-    int         mRefCount;      // reference count
-    char*       mFileName;      // original file name, if known
-    void*       mBasePtr;       // base of mmap area; page aligned
-    size_t      mBaseLength;    // length, measured from "mBasePtr"
-    off64_t     mDataOffset;    // offset used when map was created
-    void*       mDataPtr;       // start of requested data, offset from base
-    size_t      mDataLength;    // length, measured from "mDataPtr"
+  int         mRefCount;      // reference count
+  char*       mFileName;      // original file name, if known
+  void*       mBasePtr;       // base of mmap area; page aligned
+  size_t      mBaseLength;    // length, measured from "mBasePtr"
+  off64_t     mDataOffset;    // offset used when map was created
+  void*       mDataPtr;       // start of requested data, offset from base
+  size_t      mDataLength;    // length, measured from "mDataPtr"
 #ifdef HAVE_WIN32_FILEMAP
-    HANDLE      mFileHandle;    // Win32 file handle
-    HANDLE      mFileMapping;   // Win32 file mapping handle
+  HANDLE      mFileHandle;    // Win32 file handle
+  HANDLE      mFileMapping;   // Win32 file mapping handle
 #endif
 
-    static long mPageSize;
+  static long mPageSize;
 };
 
 }; // namespace android

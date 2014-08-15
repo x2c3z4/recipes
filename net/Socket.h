@@ -12,7 +12,7 @@
 namespace net {
 
 class Socket : boost::noncopyable {
- public:
+public:
   explicit Socket(int sockfd, int port = -1)
     : sockfd_(sockfd),
       port_(port) {
@@ -70,7 +70,7 @@ class Socket : boost::noncopyable {
   ///
   void setKeepAlive(bool on);
 
- private:
+private:
   const int sockfd_;
   int port_;
 };

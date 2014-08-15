@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      http:// www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -27,19 +27,23 @@ namespace android {
 template<bool> struct CompileTimeAssert;
 template<> struct CompileTimeAssert<true> {};
 #define COMPILE_TIME_ASSERT(_exp) \
-    template class CompileTimeAssert< (_exp) >;
+  template class CompileTimeAssert< (_exp) >;
 #endif
 #define COMPILE_TIME_ASSERT_FUNCTION_SCOPE(_exp) \
-    CompileTimeAssert<( _exp )>();
+  CompileTimeAssert<( _exp )>();
 
 // ---------------------------------------------------------------------------
 
 #ifdef __cplusplus
 template<bool C, typename LSH, typename RHS> struct CompileTimeIfElse;
-template<typename LHS, typename RHS> 
-struct CompileTimeIfElse<true,  LHS, RHS> { typedef LHS TYPE; };
-template<typename LHS, typename RHS> 
-struct CompileTimeIfElse<false, LHS, RHS> { typedef RHS TYPE; };
+template<typename LHS, typename RHS>
+struct CompileTimeIfElse<true,  LHS, RHS> {
+  typedef LHS TYPE;
+};
+template<typename LHS, typename RHS>
+struct CompileTimeIfElse<false, LHS, RHS> {
+  typedef RHS TYPE;
+};
 #endif
 
 // ---------------------------------------------------------------------------

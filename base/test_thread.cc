@@ -16,20 +16,19 @@ bool runloop() {
   return false;
 }
 bool runExit() {
-  //base::Thread *t = static_cast<base::Thread>(user);
+  // base::Thread *t = static_cast<base::Thread>(user);
   printf(" runExit\n");
-  //sleep(100);
-  //t.requestExit();
+  // sleep(100);
+  // t.requestExit();
   return false;
 }
 
-class Bench
-{
-  public:
-    bool threadFunc() {
-      printf("class threadFunc\n");
-      return false;
-    }
+class Bench {
+public:
+  bool threadFunc() {
+    printf("class threadFunc\n");
+    return false;
+  }
 };
 
 TEST(Thread, cdor) {
@@ -37,7 +36,7 @@ TEST(Thread, cdor) {
   base::Thread t2(runExit);
 
   Bench bench;
-  base::Thread t3(boost::bind(&Bench::threadFunc,&bench));
+  base::Thread t3(boost::bind(&Bench::threadFunc, &bench));
   t1.run();
   t2.run();
   t3.run();

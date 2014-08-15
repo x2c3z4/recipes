@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      http:// www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,33 +26,32 @@
 
 namespace android {
 
-class StopWatch
-{
+class StopWatch {
 public:
-        StopWatch(  const char *name,
-                    int clock = SYSTEM_TIME_MONOTONIC,
-                    uint32_t flags = 0);
-        ~StopWatch();
-        
-        const char* name() const;
-        nsecs_t     lap();
-        nsecs_t     elapsedTime() const;
+  StopWatch(const char* name,
+            int clock = SYSTEM_TIME_MONOTONIC,
+            uint32_t flags = 0);
+  ~StopWatch();
 
-        void        reset();
-        
+  const char* name() const;
+  nsecs_t     lap();
+  nsecs_t     elapsedTime() const;
+
+  void        reset();
+
 private:
-    const char*     mName;
-    int             mClock;
-    uint32_t        mFlags;
-    
-    struct lap_t {
-        nsecs_t     soFar;
-        nsecs_t     thisLap;
-    };
-    
-    nsecs_t         mStartTime;
-    lap_t           mLaps[8];
-    int             mNumLaps;
+  const char*     mName;
+  int             mClock;
+  uint32_t        mFlags;
+
+  struct lap_t {
+    nsecs_t     soFar;
+    nsecs_t     thisLap;
+  };
+
+  nsecs_t         mStartTime;
+  lap_t           mLaps[8];
+  int             mNumLaps;
 };
 
 

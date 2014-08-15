@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      http:// www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,33 +26,32 @@ namespace android {
 // ---------------------------------------------------------------------------
 
 template <typename TYPE>
-class ANDROID_API Singleton
-{
+class ANDROID_API Singleton {
 public:
-    static TYPE& getInstance() {
-        Mutex::Autolock _l(sLock);
-        TYPE* instance = sInstance;
-        if (instance == 0) {
-            instance = new TYPE();
-            sInstance = instance;
-        }
-        return *instance;
+  static TYPE& getInstance() {
+    Mutex::Autolock _l(sLock);
+    TYPE* instance = sInstance;
+    if (instance == 0) {
+      instance = new TYPE();
+      sInstance = instance;
     }
+    return *instance;
+  }
 
-    static bool hasInstance() {
-        Mutex::Autolock _l(sLock);
-        return sInstance != 0;
-    }
-    
+  static bool hasInstance() {
+    Mutex::Autolock _l(sLock);
+    return sInstance != 0;
+  }
+
 protected:
-    ~Singleton() { };
-    Singleton() { };
+  ~Singleton() { };
+  Singleton() { };
 
 private:
-    Singleton(const Singleton&);
-    Singleton& operator = (const Singleton&);
-    static Mutex sLock;
-    static TYPE* sInstance;
+  Singleton(const Singleton&);
+  Singleton& operator = (const Singleton&);
+  static Mutex sLock;
+  static TYPE* sInstance;
 };
 
 /*
@@ -65,9 +64,9 @@ private:
  */
 
 #define ANDROID_SINGLETON_STATIC_INSTANCE(TYPE)                 \
-    template<> Mutex Singleton< TYPE >::sLock(Mutex::PRIVATE);  \
-    template<> TYPE* Singleton< TYPE >::sInstance(0);           \
-    template class Singleton< TYPE >;
+  template<> Mutex Singleton< TYPE >::sLock(Mutex::PRIVATE);  \
+  template<> TYPE* Singleton< TYPE >::sInstance(0);           \
+  template class Singleton< TYPE >;
 
 
 // ---------------------------------------------------------------------------

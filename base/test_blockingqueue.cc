@@ -14,7 +14,7 @@ typedef struct {
 } Parcel;
 
 class DataClass {
- public:
+public:
   explicit DataClass() {
     printf("+ build DataClass()\n");
   }
@@ -39,12 +39,12 @@ class DataClass {
     return video_;
   }
 
- private:
+private:
   char video_[88];
 };
 
 class BlockingQueueTest : public ::testing::Test {
- protected:
+protected:
   virtual void SetUp() {}
   virtual void TearDown() {}
 

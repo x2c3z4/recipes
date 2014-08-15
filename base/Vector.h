@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      http:// www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -40,176 +40,209 @@ class SortedVector;
  */
 
 template <class TYPE>
-class Vector : private VectorImpl
-{
+class Vector : private VectorImpl {
 public:
-            typedef TYPE    value_type;
-    
-    /*! 
-     * Constructors and destructors
-     */
-    
-                            Vector();
-                            Vector(const Vector<TYPE>& rhs);
-    explicit                Vector(const SortedVector<TYPE>& rhs);
-    virtual                 ~Vector();
+  typedef TYPE    value_type;
 
-    /*! copy operator */
-            const Vector<TYPE>&     operator = (const Vector<TYPE>& rhs) const;
-            Vector<TYPE>&           operator = (const Vector<TYPE>& rhs);    
+  /*!
+   * Constructors and destructors
+   */
 
-            const Vector<TYPE>&     operator = (const SortedVector<TYPE>& rhs) const;
-            Vector<TYPE>&           operator = (const SortedVector<TYPE>& rhs);
+  Vector();
+  Vector(const Vector<TYPE>& rhs);
+  explicit                Vector(const SortedVector<TYPE>& rhs);
+  virtual                 ~Vector();
 
-            /*
-     * empty the vector
-     */
+  /*! copy operator */
+  const Vector<TYPE>&     operator = (const Vector<TYPE>& rhs) const;
+  Vector<TYPE>&           operator = (const Vector<TYPE>& rhs);
 
-    inline  void            clear()             { VectorImpl::clear(); }
+  const Vector<TYPE>&     operator = (const SortedVector<TYPE>& rhs) const;
+  Vector<TYPE>&           operator = (const SortedVector<TYPE>& rhs);
 
-    /*! 
-     * vector stats
-     */
+  /*
+  * empty the vector
+  */
 
-    //! returns number of items in the vector
-    inline  size_t          size() const                { return VectorImpl::size(); }
-    //! returns whether or not the vector is empty
-    inline  bool            isEmpty() const             { return VectorImpl::isEmpty(); }
-    //! returns how many items can be stored without reallocating the backing store
-    inline  size_t          capacity() const            { return VectorImpl::capacity(); }
-    //! sets the capacity. capacity can never be reduced less than size()
-    inline  ssize_t         setCapacity(size_t size)    { return VectorImpl::setCapacity(size); }
+  inline  void            clear()             {
+    VectorImpl::clear();
+  }
 
-    /*!
-     * set the size of the vector. items are appended with the default
-     * constructor, or removed from the end as needed.
-     */
-    inline  ssize_t         resize(size_t size)         { return VectorImpl::resize(size); }
+  /*!
+   * vector stats
+   */
 
-    /*!
-     * C-style array access
-     */
-     
-    //! read-only C-style access 
-    inline  const TYPE*     array() const;
-    //! read-write C-style access
-            TYPE*           editArray();
-    
-    /*! 
-     * accessors
-     */
+  // ! returns number of items in the vector
+  inline  size_t          size() const                {
+    return VectorImpl::size();
+  }
+  // ! returns whether or not the vector is empty
+  inline  bool            isEmpty() const             {
+    return VectorImpl::isEmpty();
+  }
+  // ! returns how many items can be stored without reallocating the backing store
+  inline  size_t          capacity() const            {
+    return VectorImpl::capacity();
+  }
+  // ! sets the capacity. capacity can never be reduced less than size()
+  inline  ssize_t         setCapacity(size_t size)    {
+    return VectorImpl::setCapacity(size);
+  }
 
-    //! read-only access to an item at a given index
-    inline  const TYPE&     operator [] (size_t index) const;
-    //! alternate name for operator []
-    inline  const TYPE&     itemAt(size_t index) const;
-    //! stack-usage of the vector. returns the top of the stack (last element)
-            const TYPE&     top() const;
+  /*!
+   * set the size of the vector. items are appended with the default
+   * constructor, or removed from the end as needed.
+   */
+  inline  ssize_t         resize(size_t size)         {
+    return VectorImpl::resize(size);
+  }
 
-    /*!
-     * modifying the array
-     */
+  /*!
+   * C-style array access
+   */
 
-    //! copy-on write support, grants write access to an item
-            TYPE&           editItemAt(size_t index);
-    //! grants right access to the top of the stack (last element)
-            TYPE&           editTop();
+  // ! read-only C-style access
+  inline  const TYPE*     array() const;
+  // ! read-write C-style access
+  TYPE*           editArray();
 
-            /*! 
-             * append/insert another vector
-             */
-            
-    //! insert another vector at a given index
-            ssize_t         insertVectorAt(const Vector<TYPE>& vector, size_t index);
+  /*!
+   * accessors
+   */
 
-    //! append another vector at the end of this one
-            ssize_t         appendVector(const Vector<TYPE>& vector);
+  // ! read-only access to an item at a given index
+  inline  const TYPE&     operator [](size_t index) const;
+  // ! alternate name for operator []
+  inline  const TYPE&     itemAt(size_t index) const;
+  // ! stack-usage of the vector. returns the top of the stack (last element)
+  const TYPE&     top() const;
 
+  /*!
+   * modifying the array
+   */
 
-    //! insert an array at a given index
-            ssize_t         insertArrayAt(const TYPE* array, size_t index, size_t length);
+  // ! copy-on write support, grants write access to an item
+  TYPE&           editItemAt(size_t index);
+  // ! grants right access to the top of the stack (last element)
+  TYPE&           editTop();
 
-    //! append an array at the end of this vector
-            ssize_t         appendArray(const TYPE* array, size_t length);
+  /*!
+   * append/insert another vector
+   */
 
-            /*! 
-             * add/insert/replace items
-             */
-             
-    //! insert one or several items initialized with their default constructor
-    inline  ssize_t         insertAt(size_t index, size_t numItems = 1);
-    //! insert one or several items initialized from a prototype item
-            ssize_t         insertAt(const TYPE& prototype_item, size_t index, size_t numItems = 1);
-    //! pop the top of the stack (removes the last element). No-op if the stack's empty
-    inline  void            pop();
-    //! pushes an item initialized with its default constructor
-    inline  void            push();
-    //! pushes an item on the top of the stack
-            void            push(const TYPE& item);
-    //! same as push() but returns the index the item was added at (or an error)
-    inline  ssize_t         add();
-    //! same as push() but returns the index the item was added at (or an error)
-            ssize_t         add(const TYPE& item);            
-    //! replace an item with a new one initialized with its default constructor
-    inline  ssize_t         replaceAt(size_t index);
-    //! replace an item with a new one
-            ssize_t         replaceAt(const TYPE& item, size_t index);
+  // ! insert another vector at a given index
+  ssize_t         insertVectorAt(const Vector<TYPE>& vector, size_t index);
 
-    /*!
-     * remove items
-     */
-
-    //! remove several items
-    inline  ssize_t         removeItemsAt(size_t index, size_t count = 1);
-    //! remove one item
-    inline  ssize_t         removeAt(size_t index)  { return removeItemsAt(index); }
-
-    /*!
-     * sort (stable) the array
-     */
-     
-     typedef int (*compar_t)(const TYPE* lhs, const TYPE* rhs);
-     typedef int (*compar_r_t)(const TYPE* lhs, const TYPE* rhs, void* state);
-     
-     inline status_t        sort(compar_t cmp);
-     inline status_t        sort(compar_r_t cmp, void* state);
-
-     // for debugging only
-     inline size_t getItemSize() const { return itemSize(); }
+  // ! append another vector at the end of this one
+  ssize_t         appendVector(const Vector<TYPE>& vector);
 
 
-     /*
-      * these inlines add some level of compatibility with STL. eventually
-      * we should probably turn things around.
-      */
-     typedef TYPE* iterator;
-     typedef TYPE const* const_iterator;
+  // ! insert an array at a given index
+  ssize_t         insertArrayAt(const TYPE* array, size_t index, size_t length);
 
-     inline iterator begin() { return editArray(); }
-     inline iterator end()   { return editArray() + size(); }
-     inline const_iterator begin() const { return array(); }
-     inline const_iterator end() const   { return array() + size(); }
-     inline void reserve(size_t n) { setCapacity(n); }
-     inline bool empty() const{ return isEmpty(); }
-     inline void push_back(const TYPE& item)  { insertAt(item, size(), 1); }
-     inline void push_front(const TYPE& item) { insertAt(item, 0, 1); }
-     inline iterator erase(iterator pos) {
-         ssize_t index = removeItemsAt(pos-array());
-         return begin() + index;
-     }
+  // ! append an array at the end of this vector
+  ssize_t         appendArray(const TYPE* array, size_t length);
+
+  /*!
+   * add/insert/replace items
+   */
+
+  // ! insert one or several items initialized with their default constructor
+  inline  ssize_t         insertAt(size_t index, size_t numItems = 1);
+  // ! insert one or several items initialized from a prototype item
+  ssize_t         insertAt(const TYPE& prototype_item, size_t index, size_t numItems = 1);
+  // ! pop the top of the stack (removes the last element). No-op if the stack's empty
+  inline  void            pop();
+  // ! pushes an item initialized with its default constructor
+  inline  void            push();
+  // ! pushes an item on the top of the stack
+  void            push(const TYPE& item);
+  // ! same as push() but returns the index the item was added at (or an error)
+  inline  ssize_t         add();
+  // ! same as push() but returns the index the item was added at (or an error)
+  ssize_t         add(const TYPE& item);
+  // ! replace an item with a new one initialized with its default constructor
+  inline  ssize_t         replaceAt(size_t index);
+  // ! replace an item with a new one
+  ssize_t         replaceAt(const TYPE& item, size_t index);
+
+  /*!
+   * remove items
+   */
+
+  // ! remove several items
+  inline  ssize_t         removeItemsAt(size_t index, size_t count = 1);
+  // ! remove one item
+  inline  ssize_t         removeAt(size_t index)  {
+    return removeItemsAt(index);
+  }
+
+  /*!
+   * sort (stable) the array
+   */
+
+  typedef int (*compar_t)(const TYPE* lhs, const TYPE* rhs);
+  typedef int (*compar_r_t)(const TYPE* lhs, const TYPE* rhs, void* state);
+
+  inline status_t        sort(compar_t cmp);
+  inline status_t        sort(compar_r_t cmp, void* state);
+
+  // for debugging only
+  inline size_t getItemSize() const {
+    return itemSize();
+  }
+
+
+  /*
+   * these inlines add some level of compatibility with STL. eventually
+   * we should probably turn things around.
+   */
+  typedef TYPE* iterator;
+  typedef TYPE const* const_iterator;
+
+  inline iterator begin() {
+    return editArray();
+  }
+  inline iterator end()   {
+    return editArray() + size();
+  }
+  inline const_iterator begin() const {
+    return array();
+  }
+  inline const_iterator end() const   {
+    return array() + size();
+  }
+  inline void reserve(size_t n) {
+    setCapacity(n);
+  }
+  inline bool empty() const {
+    return isEmpty();
+  }
+  inline void push_back(const TYPE& item)  {
+    insertAt(item, size(), 1);
+  }
+  inline void push_front(const TYPE& item) {
+    insertAt(item, 0, 1);
+  }
+  inline iterator erase(iterator pos) {
+    ssize_t index = removeItemsAt(pos - array());
+    return begin() + index;
+  }
 
 protected:
-    virtual void    do_construct(void* storage, size_t num) const;
-    virtual void    do_destroy(void* storage, size_t num) const;
-    virtual void    do_copy(void* dest, const void* from, size_t num) const;
-    virtual void    do_splat(void* dest, const void* item, size_t num) const;
-    virtual void    do_move_forward(void* dest, const void* from, size_t num) const;
-    virtual void    do_move_backward(void* dest, const void* from, size_t num) const;
+  virtual void    do_construct(void* storage, size_t num) const;
+  virtual void    do_destroy(void* storage, size_t num) const;
+  virtual void    do_copy(void* dest, const void* from, size_t num) const;
+  virtual void    do_splat(void* dest, const void* item, size_t num) const;
+  virtual void    do_move_forward(void* dest, const void* from, size_t num) const;
+  virtual void    do_move_backward(void* dest, const void* from, size_t num) const;
 };
 
 // Vector<T> can be trivially moved using memcpy() because moving does not
 // require any change to the underlying SharedBuffer contents or reference count.
-template<typename T> struct trait_trivial_move<Vector<T> > { enum { value = true }; };
+template<typename T> struct trait_trivial_move<Vector<T> > {
+  enum { value = true };
+};
 
 // ---------------------------------------------------------------------------
 // No user serviceable parts from here...
@@ -217,202 +250,201 @@ template<typename T> struct trait_trivial_move<Vector<T> > { enum { value = true
 
 template<class TYPE> inline
 Vector<TYPE>::Vector()
-    : VectorImpl(sizeof(TYPE),
-                ((traits<TYPE>::has_trivial_ctor   ? HAS_TRIVIAL_CTOR   : 0)
-                |(traits<TYPE>::has_trivial_dtor   ? HAS_TRIVIAL_DTOR   : 0)
-                |(traits<TYPE>::has_trivial_copy   ? HAS_TRIVIAL_COPY   : 0))
-                )
-{
+  : VectorImpl(sizeof(TYPE),
+               ((traits<TYPE>::has_trivial_ctor   ? HAS_TRIVIAL_CTOR   : 0)
+                | (traits<TYPE>::has_trivial_dtor   ? HAS_TRIVIAL_DTOR   : 0)
+                | (traits<TYPE>::has_trivial_copy   ? HAS_TRIVIAL_COPY   : 0))
+              ) {
 }
 
 template<class TYPE> inline
 Vector<TYPE>::Vector(const Vector<TYPE>& rhs)
-    : VectorImpl(rhs) {
+  : VectorImpl(rhs) {
 }
 
 template<class TYPE> inline
 Vector<TYPE>::Vector(const SortedVector<TYPE>& rhs)
-    : VectorImpl(static_cast<const VectorImpl&>(rhs)) {
+  : VectorImpl(static_cast<const VectorImpl&>(rhs)) {
 }
 
 template<class TYPE> inline
 Vector<TYPE>::~Vector() {
-    finish_vector();
+  finish_vector();
 }
 
 template<class TYPE> inline
 Vector<TYPE>& Vector<TYPE>::operator = (const Vector<TYPE>& rhs) {
-    VectorImpl::operator = (rhs);
-    return *this; 
+  VectorImpl::operator = (rhs);
+  return *this;
 }
 
 template<class TYPE> inline
 const Vector<TYPE>& Vector<TYPE>::operator = (const Vector<TYPE>& rhs) const {
-    VectorImpl::operator = (static_cast<const VectorImpl&>(rhs));
-    return *this;
+  VectorImpl::operator = (static_cast<const VectorImpl&>(rhs));
+  return *this;
 }
 
 template<class TYPE> inline
 Vector<TYPE>& Vector<TYPE>::operator = (const SortedVector<TYPE>& rhs) {
-    VectorImpl::operator = (static_cast<const VectorImpl&>(rhs));
-    return *this;
+  VectorImpl::operator = (static_cast<const VectorImpl&>(rhs));
+  return *this;
 }
 
 template<class TYPE> inline
 const Vector<TYPE>& Vector<TYPE>::operator = (const SortedVector<TYPE>& rhs) const {
-    VectorImpl::operator = (rhs);
-    return *this; 
+  VectorImpl::operator = (rhs);
+  return *this;
 }
 
 template<class TYPE> inline
 const TYPE* Vector<TYPE>::array() const {
-    return static_cast<const TYPE *>(arrayImpl());
+  return static_cast<const TYPE*>(arrayImpl());
 }
 
 template<class TYPE> inline
 TYPE* Vector<TYPE>::editArray() {
-    return static_cast<TYPE *>(editArrayImpl());
+  return static_cast<TYPE*>(editArrayImpl());
 }
 
 
 template<class TYPE> inline
 const TYPE& Vector<TYPE>::operator[](size_t index) const {
-    LOG_FATAL_IF(index>=size(),
-            "%s: index=%u out of range (%u)", __PRETTY_FUNCTION__,
-            int(index), int(size()));
-    return *(array() + index);
+  LOG_FATAL_IF(index >= size(),
+               "%s: index=%u out of range (%u)", __PRETTY_FUNCTION__,
+               int(index), int(size()));
+  return *(array() + index);
 }
 
 template<class TYPE> inline
 const TYPE& Vector<TYPE>::itemAt(size_t index) const {
-    return operator[](index);
+  return operator[](index);
 }
 
 template<class TYPE> inline
 const TYPE& Vector<TYPE>::top() const {
-    return *(array() + size() - 1);
+  return *(array() + size() - 1);
 }
 
 template<class TYPE> inline
 TYPE& Vector<TYPE>::editItemAt(size_t index) {
-    return *( static_cast<TYPE *>(editItemLocation(index)) );
+  return *(static_cast<TYPE*>(editItemLocation(index)));
 }
 
 template<class TYPE> inline
 TYPE& Vector<TYPE>::editTop() {
-    return *( static_cast<TYPE *>(editItemLocation(size()-1)) );
+  return *(static_cast<TYPE*>(editItemLocation(size() - 1)));
 }
 
 template<class TYPE> inline
 ssize_t Vector<TYPE>::insertVectorAt(const Vector<TYPE>& vector, size_t index) {
-    return VectorImpl::insertVectorAt(reinterpret_cast<const VectorImpl&>(vector), index);
+  return VectorImpl::insertVectorAt(reinterpret_cast<const VectorImpl&>(vector), index);
 }
 
 template<class TYPE> inline
 ssize_t Vector<TYPE>::appendVector(const Vector<TYPE>& vector) {
-    return VectorImpl::appendVector(reinterpret_cast<const VectorImpl&>(vector));
+  return VectorImpl::appendVector(reinterpret_cast<const VectorImpl&>(vector));
 }
 
 template<class TYPE> inline
 ssize_t Vector<TYPE>::insertArrayAt(const TYPE* array, size_t index, size_t length) {
-    return VectorImpl::insertArrayAt(array, index, length);
+  return VectorImpl::insertArrayAt(array, index, length);
 }
 
 template<class TYPE> inline
 ssize_t Vector<TYPE>::appendArray(const TYPE* array, size_t length) {
-    return VectorImpl::appendArray(array, length);
+  return VectorImpl::appendArray(array, length);
 }
 
 template<class TYPE> inline
 ssize_t Vector<TYPE>::insertAt(const TYPE& item, size_t index, size_t numItems) {
-    return VectorImpl::insertAt(&item, index, numItems);
+  return VectorImpl::insertAt(&item, index, numItems);
 }
 
 template<class TYPE> inline
 void Vector<TYPE>::push(const TYPE& item) {
-    return VectorImpl::push(&item);
+  return VectorImpl::push(&item);
 }
 
 template<class TYPE> inline
 ssize_t Vector<TYPE>::add(const TYPE& item) {
-    return VectorImpl::add(&item);
+  return VectorImpl::add(&item);
 }
 
 template<class TYPE> inline
 ssize_t Vector<TYPE>::replaceAt(const TYPE& item, size_t index) {
-    return VectorImpl::replaceAt(&item, index);
+  return VectorImpl::replaceAt(&item, index);
 }
 
 template<class TYPE> inline
 ssize_t Vector<TYPE>::insertAt(size_t index, size_t numItems) {
-    return VectorImpl::insertAt(index, numItems);
+  return VectorImpl::insertAt(index, numItems);
 }
 
 template<class TYPE> inline
 void Vector<TYPE>::pop() {
-    VectorImpl::pop();
+  VectorImpl::pop();
 }
 
 template<class TYPE> inline
 void Vector<TYPE>::push() {
-    VectorImpl::push();
+  VectorImpl::push();
 }
 
 template<class TYPE> inline
 ssize_t Vector<TYPE>::add() {
-    return VectorImpl::add();
+  return VectorImpl::add();
 }
 
 template<class TYPE> inline
 ssize_t Vector<TYPE>::replaceAt(size_t index) {
-    return VectorImpl::replaceAt(index);
+  return VectorImpl::replaceAt(index);
 }
 
 template<class TYPE> inline
 ssize_t Vector<TYPE>::removeItemsAt(size_t index, size_t count) {
-    return VectorImpl::removeItemsAt(index, count);
+  return VectorImpl::removeItemsAt(index, count);
 }
 
 template<class TYPE> inline
 status_t Vector<TYPE>::sort(Vector<TYPE>::compar_t cmp) {
-    return VectorImpl::sort((VectorImpl::compar_t)cmp);
+  return VectorImpl::sort((VectorImpl::compar_t)cmp);
 }
 
 template<class TYPE> inline
 status_t Vector<TYPE>::sort(Vector<TYPE>::compar_r_t cmp, void* state) {
-    return VectorImpl::sort((VectorImpl::compar_r_t)cmp, state);
+  return VectorImpl::sort((VectorImpl::compar_r_t)cmp, state);
 }
 
 // ---------------------------------------------------------------------------
 
 template<class TYPE>
 void Vector<TYPE>::do_construct(void* storage, size_t num) const {
-    construct_type( reinterpret_cast<TYPE*>(storage), num );
+  construct_type(reinterpret_cast<TYPE*>(storage), num);
 }
 
 template<class TYPE>
 void Vector<TYPE>::do_destroy(void* storage, size_t num) const {
-    destroy_type( reinterpret_cast<TYPE*>(storage), num );
+  destroy_type(reinterpret_cast<TYPE*>(storage), num);
 }
 
 template<class TYPE>
 void Vector<TYPE>::do_copy(void* dest, const void* from, size_t num) const {
-    copy_type( reinterpret_cast<TYPE*>(dest), reinterpret_cast<const TYPE*>(from), num );
+  copy_type(reinterpret_cast<TYPE*>(dest), reinterpret_cast<const TYPE*>(from), num);
 }
 
 template<class TYPE>
 void Vector<TYPE>::do_splat(void* dest, const void* item, size_t num) const {
-    splat_type( reinterpret_cast<TYPE*>(dest), reinterpret_cast<const TYPE*>(item), num );
+  splat_type(reinterpret_cast<TYPE*>(dest), reinterpret_cast<const TYPE*>(item), num);
 }
 
 template<class TYPE>
 void Vector<TYPE>::do_move_forward(void* dest, const void* from, size_t num) const {
-    move_forward_type( reinterpret_cast<TYPE*>(dest), reinterpret_cast<const TYPE*>(from), num );
+  move_forward_type(reinterpret_cast<TYPE*>(dest), reinterpret_cast<const TYPE*>(from), num);
 }
 
 template<class TYPE>
 void Vector<TYPE>::do_move_backward(void* dest, const void* from, size_t num) const {
-    move_backward_type( reinterpret_cast<TYPE*>(dest), reinterpret_cast<const TYPE*>(from), num );
+  move_backward_type(reinterpret_cast<TYPE*>(dest), reinterpret_cast<const TYPE*>(from), num);
 }
 
 }; // namespace android

@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      http:// www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -28,12 +28,12 @@
 typedef off_t off64_t;
 
 static inline off64_t lseek64(int fd, off64_t offset, int whence) {
-    return lseek(fd, offset, whence);
+  return lseek(fd, offset, whence);
 }
 
 #ifdef HAVE_PREAD
 static inline ssize_t pread64(int fd, void* buf, size_t nbytes, off64_t offset) {
-    return pread(fd, buf, nbytes, offset);
+  return pread(fd, buf, nbytes, offset);
 }
 #endif
 
@@ -57,7 +57,7 @@ static inline ssize_t pread64(int fd, void* buf, size_t nbytes, off64_t offset) 
 #define TEMP_FAILURE_RETRY(exp) ({         \
     typeof (exp) _rc;                      \
     do {                                   \
-        _rc = (exp);                       \
+      _rc = (exp);                       \
     } while (_rc == -1 && errno == EINTR); \
     _rc; })
 #endif

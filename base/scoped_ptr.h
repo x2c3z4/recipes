@@ -9,7 +9,7 @@
 //  implementation of the scoped_ptr class, and its closely-related brethren,
 //  scoped_array, scoped_ptr_malloc, and make_scoped_ptr.
 //
-//  See http://wiki/Main/ScopedPointerInterface for the spec that drove this
+//  See http:// wiki/Main/ScopedPointerInterface for the spec that drove this
 //  file.
 
 #include <assert.h>
@@ -30,7 +30,7 @@ template <class C, class Free> class scoped_ptr_malloc;
 template <class C> class scoped_array;
 
 template <class C>
-scoped_ptr<C> make_scoped_ptr(C *);
+scoped_ptr<C> make_scoped_ptr(C*);
 
 // A scoped_ptr<T> is like a T*, except that the destructor of scoped_ptr<T>
 // automatically deletes the pointer it holds (if any).
@@ -43,7 +43,7 @@ scoped_ptr<C> make_scoped_ptr(C *);
 // sizeof(scoped_ptr<C>) == sizeof(C*)
 template <class C>
 class scoped_ptr {
- public:
+public:
 
   // The element type
   typedef C element_type;
@@ -81,13 +81,19 @@ class scoped_ptr {
     assert(ptr_ != NULL);
     return ptr_;
   }
-  C* get() const { return ptr_; }
+  C* get() const {
+    return ptr_;
+  }
 
   // Comparison operators.
   // These return whether a scoped_ptr and a raw pointer refer to
   // the same object, not just to two different but equal objects.
-  bool operator==(const C* p) const { return ptr_ == p; }
-  bool operator!=(const C* p) const { return ptr_ != p; }
+  bool operator==(const C* p) const {
+    return ptr_ == p;
+  }
+  bool operator!=(const C* p) const {
+    return ptr_ != p;
+  }
 
   // Swap two scoped pointers.
   void swap(scoped_ptr& p2) {
@@ -107,12 +113,12 @@ class scoped_ptr {
     return retVal;
   }
 
- private:
+private:
   C* ptr_;
 
   // google3 friend class that can access copy ctor (although if it actually
   // calls a copy ctor, there will be a problem) see below
-  friend scoped_ptr<C> make_scoped_ptr<C>(C *p);
+  friend scoped_ptr<C> make_scoped_ptr<C>(C* p);
 
   // Forbid comparison of scoped_ptr types.  If C2 != C, it totally doesn't
   // make sense, and if C2 == C, it still doesn't make sense because you should
@@ -152,7 +158,7 @@ inline bool operator!=(const C* p1, const scoped_ptr<const C>& p2) {
 }
 
 template <class C>
-scoped_ptr<C> make_scoped_ptr(C *p) {
+scoped_ptr<C> make_scoped_ptr(C* p) {
   // This does nothing but to return a scoped_ptr of the type that the passed
   // pointer is of.  (This eliminates the need to specify the name of T when
   // making a scoped_ptr that is used anonymously/temporarily.)  From an
@@ -176,7 +182,7 @@ scoped_ptr<C> make_scoped_ptr(C *p) {
 // Size: sizeof(scoped_array<C>) == sizeof(C*)
 template <class C>
 class scoped_array {
- public:
+public:
 
   // The element type
   typedef C element_type;
@@ -221,8 +227,12 @@ class scoped_array {
   // Comparison operators.
   // These return whether a scoped_array and a raw pointer refer to
   // the same array, not just to two different but equal arrays.
-  bool operator==(const C* p) const { return array_ == p; }
-  bool operator!=(const C* p) const { return array_ != p; }
+  bool operator==(const C* p) const {
+    return array_ == p;
+  }
+  bool operator!=(const C* p) const {
+    return array_ != p;
+  }
 
   // Swap two scoped arrays.
   void swap(scoped_array& p2) {
@@ -242,7 +252,7 @@ class scoped_array {
     return retVal;
   }
 
- private:
+private:
   C* array_;
 
   // Forbid comparison of different scoped_array types.
@@ -283,7 +293,7 @@ inline bool operator!=(const C* p1, const scoped_array<const C>& p2) {
 // This class wraps the c library function free() in a class that can be
 // passed as a template argument to scoped_ptr_malloc below.
 class ScopedPtrMallocFree {
- public:
+public:
   inline void operator()(void* x) const {
     free(x);
   }
@@ -294,7 +304,7 @@ class ScopedPtrMallocFree {
 
 template<class C, class FreeProc = ScopedPtrMallocFree>
 class scoped_ptr_malloc {
- public:
+public:
 
   // The element type
   typedef C element_type;
@@ -311,7 +321,7 @@ class scoped_ptr_malloc {
   explicit scoped_ptr_malloc(must_be_C* p): ptr_(p) { }
 
   // Construct with a void*, such as you get from malloc.
-  explicit scoped_ptr_malloc(void *p): ptr_(static_cast<C*>(p)) { }
+  explicit scoped_ptr_malloc(void* p): ptr_(static_cast<C*>(p)) { }
 
   // Destructor.  If there is a C object, call the Free functor.
   ~scoped_ptr_malloc() {
@@ -374,7 +384,7 @@ class scoped_ptr_malloc {
   }
 
   // Swap two scoped pointers.
-  void swap(scoped_ptr_malloc & b) {
+  void swap(scoped_ptr_malloc& b) {
     C* tmp = b.ptr_;
     b.ptr_ = ptr_;
     ptr_ = tmp;
@@ -391,7 +401,7 @@ class scoped_ptr_malloc {
     return tmp;
   }
 
- private:
+private:
   C* ptr_;
 
   // no reason to use these: each scoped_ptr_malloc should have its own object
