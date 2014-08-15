@@ -8,9 +8,9 @@
 
 #include "thirdparty/gtest/gtest.h"
 
-#include "base/Looper.h"
 #include "base/Thread.h"
 
+#include "net/Looper.h"
 #include "net/TcpServer.h"
 
 using namespace net;
@@ -22,7 +22,7 @@ void readMessage() {
 
 TEST(TcpServer, listen) {
   Looper loop;
-  TcpServer server(8000);
+  TcpServer server(&loop);
   server.start(); // nonblocking
   loop.loop();
 }

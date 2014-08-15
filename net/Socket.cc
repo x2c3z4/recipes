@@ -10,8 +10,10 @@
 #include <netinet/tcp.h>
 #include <assert.h>
 
+#include <string>
+
 #include <boost/implicit_cast.hpp>
-#include <glog/logging.h>
+#include "thirdparty/glog/logging.h"
 
 namespace net {
 ////////////////////////////////////////////////////////////////////
@@ -79,24 +81,28 @@ bool Socket::getTcpInfoString(char* buf, int len) const {
   return ok;
 }
 
-void Socket::bindAddress(const struct sockaddr_in& addr) {
+void Socket::bindAddress(bool loopbackOnly) {
+  struct sockaddr_in addr;
+  bzero(&addr, sizeof addr);
+  addr.sin_family = AF_INET;
+  in_addr_t ip = loopbackOnly ? INADDR_LOOPBACK : INADDR_ANY;
+  addr.sin_addr.s_addr = sockets::hostToNetwork32(ip);
+  addr.sin_port = sockets::hostToNetwork16(port_);
   int ret = ::bind(sockfd_, sockaddr_cast(&addr), static_cast<socklen_t>(sizeof addr));
-  if (ret < 0) {
-    printf("bindOrDie\n");
-  }
+  PCHECK(ret == 0) << "bind failed";
 }
 
 void Socket::listen() {
   int ret = ::listen(sockfd_, SOMAXCONN);
-  if (ret < 0) {
-    printf("listenOrDie\n");
-  }
+  PCHECK(ret == 0) << "listen port: %d failed" << port_;
 }
 
-int Socket::accept(struct sockaddr_in *addr) {
-  socklen_t addrlen = static_cast<socklen_t>(sizeof * addr);
-  int connfd = ::accept4(sockfd_, sockaddr_cast(addr),
+int Socket::accept() {
+  struct sockaddr_in addr;
+  socklen_t addrlen = static_cast<socklen_t>(sizeof(addr));
+  int connfd = ::accept4(sockfd_, sockaddr_cast(&addr),
                          &addrlen, SOCK_NONBLOCK | SOCK_CLOEXEC);
+  LOG(INFO) << "connect from " << sockets::toIpPort(addr);
   if (connfd < 0) {
     int savedErrno = errno;
     LOG(ERROR) << "Socket::accept";
@@ -167,7 +173,7 @@ namespace sockets {
 int createNonblockingOrDie() {
   int sockfd = ::socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK | SOCK_CLOEXEC, IPPROTO_TCP);
   if (sockfd < 0) {
-   LOG(ERROR) << "createNonblockingOrDie";
+    LOG(ERROR) << "createNonblockingOrDie";
   }
   return sockfd;
 }
@@ -197,28 +203,27 @@ void close(int sockfd) {
 
 
 
-void toIpPort(char* buf, size_t size,
-                       const struct sockaddr_in& addr) {
-  assert(size >= INET_ADDRSTRLEN);
-  ::inet_ntop(AF_INET, &addr.sin_addr, buf, static_cast<socklen_t>(size));
+std::string toIpPort(const struct sockaddr_in& addr) {
+  char buf[INET_ADDRSTRLEN + 10];
+  ::inet_ntop(AF_INET, &addr.sin_addr, buf, static_cast<socklen_t>(INET_ADDRSTRLEN));
   size_t end = ::strlen(buf);
   uint16_t port = networkToHost16(addr.sin_port);
-  assert(size > end);
-  snprintf(buf + end, size - end, ":%u", port);
+  snprintf(buf + end, sizeof(buf) - end, ":%u", port);
+  return buf;
 }
 
 void toIp(char* buf, size_t size,
-                   const struct sockaddr_in& addr) {
+          const struct sockaddr_in& addr) {
   assert(size >= INET_ADDRSTRLEN);
   ::inet_ntop(AF_INET, &addr.sin_addr, buf, static_cast<socklen_t>(size));
 }
 
 void fromIpPort(const char* ip, uint16_t port,
-                         struct sockaddr_in* addr) {
+                struct sockaddr_in* addr) {
   addr->sin_family = AF_INET;
   addr->sin_port = hostToNetwork16(port);
   if (::inet_pton(AF_INET, ip, &addr->sin_addr) <= 0) {
-   LOG(ERROR) << "fromIpPort";
+    LOG(ERROR) << "fromIpPort";
   }
 }
 

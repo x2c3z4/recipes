@@ -2,8 +2,8 @@ cc_library(
     name="base",
     srcs=[
     "Timers.cpp",
-    "Looper.cc",
     "Thread.cc",
+    "Util.cc",
     ])
 
 cc_test(
@@ -14,13 +14,6 @@ cc_test(
         name="test_vector",
         srcs="test_vector.cc",
 )
-cc_test(
-        name="test_looper",
-        srcs="test_looper.cc",
-        deps = [
-        ":base",
-        ]
-        )
 cc_test(
         name="test_thread",
         srcs="test_thread.cc",
