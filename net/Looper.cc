@@ -8,7 +8,7 @@
 
 namespace net {
 Looper::Looper():
-  quit_(0) {
+  quit_(false) {
   epollfd_ = epoll_create(MAX_EVENTS);
   if (epollfd_ == -1) {
     perror("epoll create error");
@@ -56,7 +56,8 @@ void Looper::removeFileEvent(int fd, int delmask) {
 int Looper::processEvent_() {
   struct epoll_event events_[MAX_EVENTS];
   int nfds;
-  nfds = epoll_wait(epollfd_, events_, MAX_EVENTS, -1);
+  int timeoutMs = 10000;
+  nfds = epoll_wait(epollfd_, events_, MAX_EVENTS, timeoutMs);
   if (nfds == -1) {
     perror("epoll_wait");
     exit(-1);
@@ -82,11 +83,11 @@ int Looper::processEvent_() {
 }
 
 void Looper::loop() {
-  quit_ = 0;
   int processed = 0;
   while (!quit_) {
     processed = processEvent_();
-    printf("processed %d ... \n", processed);
+    LOG(INFO) << "processed " << processed << " ... \n";
   }
+  LOG(ERROR) << "[-] Loop exit";
 }
 }

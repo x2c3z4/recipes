@@ -2,6 +2,8 @@ cc_library(
     name = "net",
     srcs = [
     "Looper.cc",
+    "LooperThread.cc",
+    "LooperThreadPool.cc",
     "TcpServer.cc",
     "Socket.cc",
     ],
@@ -27,3 +29,12 @@ cc_test(
     ":net",
     ]
     )
+
+cc_test(
+    name="test_looperthread",
+    srcs = [
+    "test_looperthread.cc",
+    ],
+    deps = [
+    ":net",
+    ])

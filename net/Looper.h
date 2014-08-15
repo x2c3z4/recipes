@@ -62,6 +62,10 @@ public:
   int createFileEvent(int fd, int mask, const Functor& func, void* clientData);
   void removeFileEvent(int fd, int mask);
   void loop();
+
+  void requestQuit() {
+    quit_ = true;
+  }
 private:
   int processEvent_();
 
