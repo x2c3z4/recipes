@@ -33,4 +33,11 @@ cc_test(
     "//thirdparty/gtest:gtest_main",
     ],
   )
+cc_test(
+    name = "lru-cache2",
+    srcs = "lru-cache2.cc",
+    deps = [
+    "//thirdparty/gtest:gtest_main",
+    ],
+  )
 
