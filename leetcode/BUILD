@@ -47,4 +47,11 @@ cc_test(
     "//thirdparty/gtest:gtest_main",
     ],
   )
+cc_test(
+    name = "bintree-postorder-traversal",
+    srcs = "bintree-postorder-traversal.cc",
+    deps = [
+    "//thirdparty/gtest:gtest_main",
+    ],
+  )
 
