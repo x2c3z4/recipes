@@ -54,4 +54,17 @@ cc_test(
     "//thirdparty/gtest:gtest_main",
     ],
   )
-
+cc_test(
+    name = "merge-sorted-array",
+    srcs = "merge-sorted-array.cc",
+    deps = [
+    "//thirdparty/gtest:gtest_main",
+    ],
+  )
+cc_test(
+    name = "merge-two-sorted-lists",
+    srcs = "merge-two-sorted-lists.cc",
+    deps = [
+    "//thirdparty/gtest:gtest_main",
+    ],
+  )
