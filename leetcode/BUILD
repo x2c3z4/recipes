@@ -68,3 +68,31 @@ cc_test(
     "//thirdparty/gtest:gtest_main",
     ],
   )
+cc_test(
+    name = "word-search",
+    srcs = "word-search.cc",
+    deps = [
+    "//thirdparty/gtest:gtest_main",
+    ],
+  )
+cc_test(
+    name = "bintree-max-depth",
+    srcs = "bintree-max-depth.cc",
+    deps = [
+    "//thirdparty/gtest:gtest_main",
+    ],
+  )
+cc_test(
+    name = "implement-strstr",
+    srcs = "implement-strstr.cc",
+    deps = [
+    "//thirdparty/gtest:gtest_main",
+    ],
+  )
+cc_test(
+    name = "implement-atoi",
+    srcs = "implement-atoi.cc",
+    deps = [
+    "//thirdparty/gtest:gtest_main",
+    ],
+  )
