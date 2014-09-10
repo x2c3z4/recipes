@@ -96,3 +96,17 @@ cc_test(
     "//thirdparty/gtest:gtest_main",
     ],
   )
+cc_test(
+    name = "word-ladder2",
+    srcs = "word-ladder2.cc",
+    deps = [
+    "//thirdparty/gtest:gtest_main",
+    ],
+  )
+cc_test(
+    name = "wildcard-matching",
+    srcs = "wildcard-matching.cc",
+    deps = [
+    "//thirdparty/gtest:gtest_main",
+    ],
+  )
