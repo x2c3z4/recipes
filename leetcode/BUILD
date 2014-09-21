@@ -110,3 +110,17 @@ cc_test(
     "//thirdparty/gtest:gtest_main",
     ],
   )
+cc_test(
+    name = "sell-stock",
+    srcs = "sell-stock.cc",
+    deps = [
+    "//thirdparty/gtest:gtest_main",
+    ]
+   )
+cc_test(
+    name = "interleaving-string",
+    srcs = "interleaving-string.cc",
+    deps = [
+    "//thirdparty/gtest:gtest_main",
+    ]
+   )

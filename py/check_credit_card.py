@@ -86,7 +86,7 @@ def main():
     try:
       r = s.post(POST_URL, data=payload)
       filter_body(credit_id, r.text)
-    except ConnectionError:
+    except requests.exceptions.ConnectionError as e:
       print '[-] Max retries exceeded, update session'
       r = s.get(URL_JESSION)
   # pp = pprint.PrettyPrinter(indent=4)
