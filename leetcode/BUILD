@@ -124,3 +124,10 @@ cc_test(
     "//thirdparty/gtest:gtest_main",
     ]
    )
+cc_test(
+    name = "sodoku-solver",
+    srcs = "sodoku-solver.cc",
+    deps = [
+    "//thirdparty/gtest:gtest_main",
+    ]
+   )
