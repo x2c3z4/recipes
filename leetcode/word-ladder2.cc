@@ -1,118 +1,103 @@
 #include <vector>
 #include <string>
 #include <unordered_set>
-#include <map>
+#include <unordered_map>
+#include <algorithm>
+#include <deque>
+
+#include <iostream>
 #include "thirdparty/gtest/gtest.h"
 using namespace std;
 
 class Solution {
 public:
-  #define INT_MAX  2147483647
-  bool isNeighbor(const string& start, const string& str) {
-    int count = 0;
-    for(unsigned int i = 0; i< start.size(); ++i) {
-      if(start[i] != str[i])
-        count++;
-    }
-    if(count == 1) {
-      return true;
-    }
-    return false;
-  }
-
-  vector<string> getNeighbor(const string& start) {
-    vector<string> ret;
-    for(auto word: *dict_) {
-      if(!used_[word] && isNeighbor(start, word)) {
-        ret.push_back(word);
+    bool isNeighbor (const string& start, const string& str) {
+      int count = 0;
+      for (unsigned int i = 0; i< start.size(); ++i) {
+        if(start[i] != str[i])
+          count++;
       }
-    }
-    // cout << "[" << start << "] neighbor:" << endl;
-    // for(auto w: ret) {
-    //   cout << w << " ";
-    // }
-    // cout << endl;
-    return ret;
-  }
-
-    vector<vector<string>> findLadders(string start, string end, unordered_set<string> &dict) {
-      vector<vector<string>> ret, ret2;
-      dict_ = &dict;
-      end_ = end;
-      path_depth_ = INT_MAX;
-      // used_ = new bool*[dict.size()];
-      for(auto word: dict) {
-        used_[word] = false;
+      if(count == 1) {
+        return true;
       }
-      // for(int i = 0; i < dict.size(); i++) {
-      //   used_[] = false;
-      // }
-      vector<string> neis = getNeighbor(start);
-      if(neis.empty()) {
-        // bad path
-        return ret;
-      }
-      vector<string> item;
-      item.push_back(start);
+      return false;
+    };
 
-      for(auto nei: neis) {
-        __findLadders(nei, ret, item);
-      }
-
-      for(auto it = ret.begin(); it != ret.end(); ++it) {
-        if(it->size() == path_depth_) {
-          ret2.push_back(*it);
+    void gen_path(unordered_map<string, vector<string> > &father,
+      vector<string> &path, const string& word, const string& start, vector<vector<string>> &rst) {
+      path.push_back(word);
+      if (word == start) {
+        // reverse(path.begin(), path.end());
+        rst.push_back(path);
+        reverse(rst.back().begin(), rst.back().end());
+        // path.resize(0);
+      } else {
+        auto next = father[word];
+        for (auto &it : next) {
+          gen_path(father, path, it, start, rst);
         }
       }
-      return ret2;
+      path.pop_back();
+    };
+
+
+    vector<vector<string>> findLadders(string start, string end, unordered_set<string> &dict) {
+      vector<string> curr, next; // vector or unordered_set
+      unordered_set<string> visited;
+      unordered_map<string, vector<string> > father;
+      bool found = false;
+
+      auto is_target = [&] (const string& item) {
+        return isNeighbor(item, end);
+      };
+
+      auto state_extend = [&] (const string& item) {
+        deque<string> match;
+        for (auto &it : dict) {
+          if (visited.count(it) == 0 && isNeighbor(it, item)) {
+            match.push_back(it);
+          }
+        }
+        return match;
+      };
+
+      curr.push_back(start);
+      while (!curr.empty()) {
+        for (auto &it : curr) {
+          visited.insert(it);
+        }
+        while (!curr.empty()) {
+          const string item = curr.back();
+          curr.pop_back();
+          // cout << "item: " << item << endl;
+          // curr has arrived one path, then the next should not go there,
+          // because then the path is more length than the first
+          const auto &new_states = state_extend(item);
+
+          for (const auto &it : new_states) {
+            // cout << it << " ";
+            if (is_target(it)) {
+              found = true;
+              father[it].push_back(item);
+              father[end].push_back(it);
+            } else {
+              next.push_back(it);
+              father[it].push_back(item);
+            }
+          } // for
+          // cout << endl;
+        } // end while
+        swap(curr, next);
+      } // end outer while
+
+      // gen path, dfs
+      vector<vector<string>> rst;
+      vector<string> path;
+      if (found) {
+        gen_path(father, path, end, start, rst);
+      }
+      return rst;
     }
-
-    void __findLadders(const string& start, vector<vector<string>>& ret, vector<string> item) {
-      if(item.size() > path_depth_ - 2) {
-        return;
-      }
-      if(isNeighbor(start, end_)) {
-        // TODO(fengli): add one item
-        // vector<string> item;
-        // for(auto it: used_) {
-        //   if(it.second)
-        //     item.push_back(it.first);
-        // }
-        // cout << "[neighbor] " << start << " " << end_ << endl;
-        item.push_back(start);
-        item.push_back(end_);
-        ret.push_back(item);
-
-        if(item.size() < path_depth_)
-          path_depth_ = item.size();
-
-        // cout << "[ item ]" << endl;
-        // for(auto w: item) {
-        //   cout << w << " ";
-        // }
-        // cout << endl;
-        return;
-      }
-
-      vector<string> neis = getNeighbor(start);
-      if(neis.empty()) {
-        // bad path
-        return;
-      }
-      used_[start] = true;
-      item.push_back(start);
-      for(string nei: neis) {
-        __findLadders(nei, ret, item);
-      }
-      used_[start] = false;
-      // item.pop_back();
-    }
-  private:
-    unordered_set<string> *dict_;
-    string end_;
-    // bool *used_;
-    map<string, bool> used_;
-    unsigned int path_depth_;
 };
 
 void print_result(const vector<vector<string>>& vecs) {
@@ -123,6 +108,12 @@ void print_result(const vector<vector<string>>& vecs) {
     cout << endl;
   }
 }
+
+TEST(WordLadder, isNeighbor) {
+  Solution s;
+  EXPECT_TRUE(s.isNeighbor("hit", "hot"));
+}
+
 TEST(WordLadder, findLadders) {
   string start("hit");
   string end("cog");
@@ -131,11 +122,6 @@ TEST(WordLadder, findLadders) {
   Solution s;
   ret = s.findLadders(start, end, dict);
   print_result(ret);
-}
-
-TEST(WordLadder, isNeighbor) {
-  Solution s;
-  EXPECT_TRUE(s.isNeighbor("hit", "hot"));
 }
 
 TEST(WordLadder, bigTest) {
