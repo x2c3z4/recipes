@@ -131,3 +131,10 @@ cc_test(
     "//thirdparty/gtest:gtest_main",
     ]
    )
+cc_test(
+    name = "restore-ip",
+    srcs = "restore-ip.cc",
+    deps = [
+    "//thirdparty/gtest:gtest_main",
+    ]
+   )
