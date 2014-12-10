@@ -138,3 +138,28 @@ cc_test(
     "//thirdparty/gtest:gtest_main",
     ]
    )
+cc_test(
+    name = "three_nodes",
+    srcs = "three_nodes.cc",
+    deps = [
+    "//thirdparty/gtest:gtest_main",
+    ]
+    )
+cc_test(
+    name = "node_distance",
+    srcs = "node_distance.cc",
+    deps = [
+    "//thirdparty/gtest:gtest_main",
+    ]
+    )
+cc_test(
+    name = "expression_cal",
+    srcs = "expression_cal.cc",
+    deps = [
+    "//thirdparty/gtest:gtest_main",
+    ]
+    )
+cc_test(
+    name = "ffn",
+    srcs = "ffn.cc",
+    )
