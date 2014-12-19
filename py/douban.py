@@ -34,9 +34,9 @@ def get_credentials(mach):
 
 def debugReq(r):
   pp = pprint.PrettyPrinter(indent=4)
-  pp.pprint(r.request.__dict__)
+  # pp.pprint(r.request.__dict__)
   # print >>sys.stderr, r.text
-  print >>sys.stderr, r.cookies
+  print >>sys.stderr, s.cookies.get_dict()
 
 def getCaptId(url):
   try:
