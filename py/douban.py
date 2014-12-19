@@ -1,5 +1,5 @@
 #--*-- coding:utf-8 --*--
-import requests
+import requests, requests.utils, pickle
 import httplib
 import sys
 import pprint
@@ -7,7 +7,9 @@ from BeautifulSoup import BeautifulSoup
 import re
 import shutil
 import netrc
+import os.path
 
+COOKIE_FILE='douban.cookies'
 # LOGIN_URL = 'http://www.newsmth.net/nForum/user/ajax_login.json'
 LOGIN_URL = 'https://www.douban.com/accounts/login'
 s = requests.Session()
@@ -15,6 +17,15 @@ s.headers.update({'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_4) A
 'Connection':'keep-alive',
 'Content-type':'application/x-www-form-urlencoded'})
 # headers = {'X-Requested-With':'XMLHttpRequest'}
+def saveCookies():
+  with open(COOKIE_FILE, 'w') as f:
+      pickle.dump(requests.utils.dict_from_cookiejar(s.cookies), f)
+
+def loadCookies():
+  with open(COOKIE_FILE) as f:
+      cookies = requests.utils.cookiejar_from_dict(pickle.load(f))
+      s.cookies = cookies
+  print >>sys.stderr, '[+] load cookies!!!'
 
 def patch_send():
     old_send= httplib.HTTPConnection.send
@@ -23,7 +34,17 @@ def patch_send():
         return old_send(self, data) #return is not necessary, but never hurts, in case the library is changed
     httplib.HTTPConnection.send= new_send
 
+# def patch_getresponse():
+#     old_getresponse= httplib.HTTPConnection.getresponse
+#     def new_getresponse( self, buffering=False):
+#         data = old_getresponse(self, buffering) #return is not necessary, but never hurts, in case the library is changed
+#         print data
+#         return data
+#     httplib.HTTPConnection.getresponse= new_getresponse
+# patch_getresponse()
+
 patch_send()
+
 
 def get_credentials(mach):
   # default is $HOME/.netrc
@@ -34,6 +55,7 @@ def get_credentials(mach):
 
 def debugReq(r):
   pp = pprint.PrettyPrinter(indent=4)
+  pp.pprint(r.status_code)
   # pp.pprint(r.request.__dict__)
   # print >>sys.stderr, r.text
   print >>sys.stderr, s.cookies.get_dict()
@@ -61,6 +83,9 @@ def captcha(url):
   auth = raw_input("Please enter chaptcode: ")
   return True, captchaId, auth
 
+def isLogin():
+  return 'ck' in s.cookies.get_dict()
+
 def login(user, passwd):
   (ok, captchaId ,auth) = captcha(LOGIN_URL)
   payload = {
@@ -80,7 +105,8 @@ def login(user, passwd):
     print "login error"
 
 def sendComment(topicId, content):
-  COMMENT_URL = 'http://www.douban.com/group/topic/' + str(topicId) + '/add_comment'
+  COMMENT_PAGE_URL = 'http://www.douban.com/group/topic/' + str(topicId) + '/'
+  COMMENT_POST_URL = COMMENT_PAGE_URL + 'add_comment'
   # print s.cookies.get_dict()
   payload = {
   'ck':s.cookies.get_dict()['ck'][1:-1],
@@ -88,23 +114,40 @@ def sendComment(topicId, content):
   'start':'0',
   'submit_btn':'加上去'
   }
-  (ok,  captchaId ,auth) = captcha(COMMENT_URL)
+  (ok,  captchaId ,auth) = captcha(COMMENT_PAGE_URL)
   if ok:
     payload['captcha-id'] = captchaId
     payload['captcha-solution'] = auth
   try:
     # add nforms id
     # cookies = {'NFORUM':'u4cirv4rtes0hvvq6qe0fk6de7'}
-    r = s.post(COMMENT_URL,data = payload)
+    r = s.post(COMMENT_POST_URL,data = payload)
     debugReq(r)
   except requests.exceptions.ConnectionError as e:
     print "comment error"
 
 def main():
-  (user, passwd) = get_credentials('simple_user')
-  login(user, passwd)
-  sendComment(70360001,"upp")
+  if not os.path.exists(COOKIE_FILE):
+    (user, passwd) = get_credentials('simple_user')
+    login(user, passwd)
+    if not isLogin():
+      print >>sys.stderr, "[-] not login"
+      return
+    saveCookies()
+  else:
+    loadCookies()
+  for i in xrange(70360001, 70360002):
+    sendComment(i,"up")
   # sendpost("ORACLE招聘", "")
+
+def test():
+  loadCookies()
+  if not isLogin():
+    print >>sys.stderr, "[-] not login"
+    return
+  for i in xrange(70360001, 70360002):
+    sendComment(i,"up")
 
 if __name__ == "__main__":
   main()
+  # test()
