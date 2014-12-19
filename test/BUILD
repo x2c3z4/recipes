@@ -22,3 +22,14 @@ cc_binary(
     name = "check_end",
     srcs = "check_end.cc",
 )
+
+cc_binary(
+    name = "inotify",
+    srcs = ["inotify.cc",]
+)
+
+cc_binary(
+    name = "open_test",
+    srcs = ["open_test.cc",
+    "time_bench.cc",]
+)
