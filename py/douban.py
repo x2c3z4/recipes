@@ -136,7 +136,8 @@ def main():
     saveCookies()
   else:
     loadCookies()
-  for i in xrange(70360001, 70360002):
+  topics=[70466781,70466816,70470523]
+  for i in topics:
     sendComment(i,"up")
   # sendpost("ORACLE招聘", "")
 
