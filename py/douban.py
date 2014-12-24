@@ -105,7 +105,7 @@ def login(user, passwd):
     print "login error"
 
 def sendComment(topicId, content):
-  COMMENT_PAGE_URL = 'http://www.douban.com/group/topic/' + str(topicId) + '/'
+  COMMENT_PAGE_URL = 'http://www.douban.com/group/topic/' + topicId + '/'
   COMMENT_POST_URL = COMMENT_PAGE_URL + 'add_comment'
   # print s.cookies.get_dict()
   payload = {
@@ -126,6 +126,65 @@ def sendComment(topicId, content):
   except requests.exceptions.ConnectionError as e:
     print "comment error"
 
+# http://www.douban.com/j/group/topic/26097686/remove_comment
+# cid:304737698
+# ck:TAsF
+'''
+http://www.douban.com/group/topic/26097686/remove_comment?cid=304737698
+ck:TAsF
+cid:304737698
+reason:other_reason
+other:
+submit:确定
+'''
+def getCommentIds(url):
+  try:
+    r = s.get(url)
+    soup = BeautifulSoup(r.text)
+    rows = soup.findAll('li',attrs={'class':'clearfix comment-item'})
+    ids = [x['id'] for x in rows]
+    print ids
+    return ids
+  except:
+      print "Unexpected error:", sys.exc_info()[0]
+      return None
+
+def removeComment(topicId, cid):
+  COMMENT_DEL_URL = 'http://www.douban.com/group/topic/' + topicId + '/remove_comment?cid=' + cid
+  payload = {
+  'ck':s.cookies.get_dict()['ck'][1:-1],
+  'cid': cid,
+  'reason':'other_reason',
+  'other':'',
+  'submit':'确定',
+  }
+  r = s.post(COMMENT_DEL_URL,data = payload)
+
+def removeComments(topicId):
+  COMMENT_PAGE_URL = 'http://www.douban.com/group/topic/' + topicId + '/'
+  # get comment id
+  ids = getCommentIds(COMMENT_PAGE_URL)
+  for cid in ids:
+    removeComment(topicId, cid)
+  # print s.cookies.get_dict()
+  # payload = {
+  # 'ck':s.cookies.get_dict()['ck'][1:-1],
+  # 'rv_comment': content,
+  # 'start':'0',
+  # 'submit_btn':'加上去'
+  # }
+  # (ok,  captchaId ,auth) = captcha(COMMENT_PAGE_URL)
+  # if ok:
+  #   payload['captcha-id'] = captchaId
+  #   payload['captcha-solution'] = auth
+  # try:
+  #   # add nforms id
+  #   # cookies = {'NFORUM':'u4cirv4rtes0hvvq6qe0fk6de7'}
+  #   r = s.post(COMMENT_POST_URL,data = payload)
+  #   debugReq(r)
+  # except requests.exceptions.ConnectionError as e:
+  #   print "comment error"
+
 def main():
   if not os.path.exists(COOKIE_FILE):
     (user, passwd) = get_credentials('simple_user')
@@ -136,10 +195,12 @@ def main():
     saveCookies()
   else:
     loadCookies()
-  topics=[70466781,70466816,70470523]
-  for i in topics:
-    sendComment(i,"up")
-  # sendpost("ORACLE招聘", "")
+
+  # sendComment(70523086,"顶")
+  removeComments('70360001')
+  # topics=[70523086]
+  # for i in topics:
+  #   sendComment(i,"顶")
 
 def test():
   loadCookies()
