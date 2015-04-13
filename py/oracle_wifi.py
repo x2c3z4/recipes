@@ -11,7 +11,10 @@ import os.path
 
 COOKIE_FILE='.cookies'
 LOGIN_URL = 'https://login.oracle.com/oam/server/sso/auth_cred_submit'
-WIFI_URL = 'https://gmp.oracle.com/captcha/files/airespace_pwd_apac.txt?_dc=1426063232433'
+WIFI_URL_JAPAC = 'https://gmp.oracle.com/captcha/files/airespace_pwd_apac.txt?_dc=1426063232433'
+WIFI_URL_AMERICAS = 'https://gmp.oracle.com/captcha/files/airespace_pwd.txt?_dc=1428891906138'
+WIFI_URL_EMEA = 'https://gmp.oracle.com/captcha/files/airespace_pwd_emea.txt?_dc=1428891953219'
+
 s = requests.Session()
 s.headers.update({'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.94 Safari/537.36',
 'Connection':'keep-alive',
@@ -78,6 +81,9 @@ def login(user, passwd):
   except requests.exceptions.ConnectionError as e:
     print "login error"
 
+def extract(content):
+  return '\n'.join(content.split('\n')[1:]) 
+
 def main():
   #if not os.path.exists(COOKIE_FILE):
   if True:
@@ -88,9 +94,13 @@ def main():
     loadCookies()
 
   try:
-    r = s.get(WIFI_URL)
+    r = s.get(WIFI_URL_JAPAC)
     #debugReq(r)
-    print >>sys.stdout, r.text
+    print >>sys.stdout, "JAPAC:\n%s"%(extract(r.text),)
+    r = s.get(WIFI_URL_AMERICAS)
+    print >>sys.stdout, "Americas:\n%s"%(extract(r.text),)
+    r = s.get(WIFI_URL_EMEA)
+    print >>sys.stdout, "EMEA:\n%s"%(extract(r.text),)
   except requests.exceptions.ConnectionError as e:
     print "Get WiFi error"
 
