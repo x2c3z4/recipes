@@ -9,12 +9,13 @@ import shutil
 import netrc
 import os.path
 import fileinput
+from urlparse import urlparse, parse_qs
 
 
-COOKIE_FILE='.weixin.cookies'
+COOKIE_FILE='/tmp/.weixin.cookies'
 LOGIN_URL = 'https://mp.weixin.qq.com/cgi-bin/login'
-POST_ALL_URL = 'https://mp.weixin.qq.com/cgi-bin/masssend?t=ajax-response&token=1599128149&lang=zh_CN'
-POST_SINGLE_URL = 'https://mp.weixin.qq.com/cgi-bin/singlesend?t=ajax-response&f=json&token=1599128149&lang=zh_CN'
+POST_ALL_URL = 'https://mp.weixin.qq.com/cgi-bin/masssend?t=ajax-response&token=%s&lang=zh_CN'
+POST_SINGLE_URL = 'https://mp.weixin.qq.com/cgi-bin/singlesend?t=ajax-response&f=json&token=%s&lang=zh_CN'
 
 s = requests.Session()
 s.headers.update({'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.94 Safari/537.36',
@@ -83,24 +84,45 @@ def login(user, passwd):
     print sys.exc_info()[0]
     print "login error"
 
-def post_single_message(msg, user):
+def get_token():
+  '''change every day'''
+  r = s.get("https://mp.weixin.qq.com/", allow_redirects=False)
+  return parse_qs(urlparse(r.headers['location']).query)['token'][0]
+
+def post_single_message(mytoken, msg, tofakeid):
   payload = {
-      'token': '1599128149',
+      'token': mytoken,
       'lang': 'zh_CN',
       'f': 'json',
       'ajax': '1',
       'random': '0.8057038299739361',
       'type': '1',
       'content': msg,
-      'tofakeid': '195927815',
+      'tofakeid': tofakeid,
       'imgcode': '',
   }
-  r = s.post(POST_SINGLE_URL, data=payload)
+  r = s.post(POST_SINGLE_URL%(mytoken,), data=payload)
   #debugReq(r)
 
-def post_all_message(msg):
+def __get_user_list(mytoken):
+  USER_URL = "https://mp.weixin.qq.com/cgi-bin/contactmanage?t=user/index&pagesize=100&pageidx=0&type=0&token=%s&lang=zh_CN"%(mytoken,)
+  p = re.compile(r'\{\s*"id"\s*:\s*(.+?)\s*,\s*"nick_name"\s*:\s*(.+?)\s*,\s*"remark_name"\s*:\s*(.+?)\s*,\s*"group_id"\s*:\s*(.+?)\s*\}')
+  r = s.get(USER_URL)
+  return p.findall(r.text)
+
+def post_onebyone_message(mytoken, msg):
+  users = __get_user_list(mytoken)
+  if users is None:
+    return
+
+  for user in users:
+    (fakeid, nick_name, _, _) = user
+    print "sending to %s(%s)"%(nick_name,fakeid)
+    #post_single_message(mytoken, msg, fakeid)
+
+def post_all_message(mytoken, msg):
   payload = {
-      'token': '1599128149',
+      'token': mytoken,
       'lang': 'zh_CN',
       'f': 'json',
       'ajax': '1',
@@ -118,7 +140,7 @@ def post_all_message(msg):
       'imgcode': '',
       'operation_seq': '207055780',
   }
-  r = s.post(POST_ALL_URL, data=payload)
+  r = s.post(POST_ALL_URL%(mytoken,) , data=payload)
   #debugReq(r)
 
 def main():
@@ -131,14 +153,16 @@ def main():
   else:
     loadCookies()
 
+  mytoken = get_token()
 
   content = ''
   for line in fileinput.input():
     content += line
 
   try:
-    post_single_message(content, "test")
-    post_all_message("I'm a robot")
+    #post_single_message(mytoken, content, '195927815') # send to me
+    post_onebyone_message(mytoken, content)
+    #post_all_message(mytoken, content)
   except requests.exceptions.ConnectionError as e:
     print sys.exc_info()[0]
     print "send error!"
