@@ -38,6 +38,7 @@ def debugReq(r):
 s = requests.Session()
 s.headers.update({'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.94 Safari/537.36',
   'Connection':'keep-alive',
+  'Cookie':'visited=2015%2F05%2F22+16%3A09%3A50; hl=en; pv=28; userno=20150522-007960; from=google; refdomain=www.google.com',
   'Content-type':'application/x-www-form-urlencoded'})
 
 
@@ -59,16 +60,21 @@ def get_proxies_with_freeproxylists_net():
   proxies = []
   PROXIES_URL = 'http://www.freeproxylists.net/'
   r = s.get(PROXIES_URL)
-  print r.text
-  page_lists = re.findall('page=\d+', r.text)
-  page_lists = list(set(page_lists))
-  print page_lists
-  return
-  for page in page_lists:
-    r = s.get(PROXIES_URL + page)
+  page_lists = re.findall('page=(\d+)', r.text)
+  max_page = max([int(i) for i in page_lists])
+  p = re.compile(r'IPDecode\("(.*?)"\)</script></td><td align="center">(\d+)</td><td align="center">(\w+)</td>')
+  for page in range(1, max_page):
+    print "page=", page
+    if page != 1:
+      r = s.get(PROXIES_URL + "?/page=" + str(page))
     ips = []
-    for (ip, port) in re.findall(r'(\d+\.\d+\.\d+\.\d+)</td><td>(\d+)', r.text):
-      ips.append("%s:%s"%(ip,port))
+    for (ip, port, proto) in p.findall(r.text):
+      ip = ip.replace("%",'').decode('hex')
+      ip = re.sub('<[^<]+?>', '', ip)
+      if proto.lower() == "http":
+        ips.append("http://%s:%s"%(ip,port))
+      if proto.lower() == "https":
+        ips.append("https://%s:%s"%(ip,port))
     proxies.extend(ips)
   return list(set(proxies))
 
@@ -79,22 +85,46 @@ def submit_vote(ip):
       'num': '1007',
   }
   proxies = {
-      'http' : ip
+      'http' : ip,
+      'https' : ip
   }
   try:
-    r = s.post(POST_URL, data=payload, proxies=proxies)
+    r = s.post(POST_URL, data=payload, proxies=proxies, timeout=3)
     debugReq(r)
-  except requests.exceptions.ConnectionError as e:
-    print "skip proxy %s"%s(ip,)
+  except requests.exceptions.RequestException as e:
+    print ip,e
+    return "skip proxy %s"%s(ip,)
+
+  if len(r.text) > 10:
+    return "exception!"
+  return r.text
+
+succ = 0
+only = 0
+exce = 0
+other = 0
+def accumulate(result):
+  global succ, only, exce, other
+  if result == 'ok':
+    succ = succ + 1
+  elif result == 'only':
+    only = only + 1
+  elif result == 'exception!':
+    exce = exce + 1
+  else:
+    other = other + 1
+  print "succ: %d, only: %d, exce: %d, other: %d"%(succ,only,exce,other)
 
 def main():
     proxies = get_proxies_with_proxy_com_ru()
+    proxies.extend(get_proxies_with_freeproxylists_net())
+    print proxies
     pool = Pool(50)
     print "ips: %d"%(len(proxies),)
 
     #pool.map(submit_vote, proxies)
     for ip in proxies:
-      pool.apply_async(submit_vote, [ip])
+      pool.apply_async(submit_vote, [ip], callback=accumulate)
     pool.close()
     pool.join()
 
