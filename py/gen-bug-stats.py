@@ -11,41 +11,59 @@ import os.path
 import time
 import datetime
 from tabulate import tabulate
+import markdown
+import codecs
+import atexit
+# from markdown.extensions.toc import TocExtension
 
 class Blacklist:
 
   def __init__(self):
     self.file='/tmp/bugno.txt'
     self.lines = []
-    with open(self.file, 'w+') as f:
-      self.lines = f.read().splitlines()
+    self.fd = open(self.file, 'w+')
+    self.lines = self.fd.read().splitlines()
+    atexit.register(self.save_blacklist)
 
   def add_blacklist_bug(self, bugno):
     self.lines.append(bugno)
-    with open(self.file, 'w+') as f:
-      f.write('\n'.join(self.lines))
 
   def is_in_blacklist(self, bugno):
     return bugno in self.lines
+
+  def save_blacklist(self):
+    self.fd.write('\n'.join(self.lines))
+    self.fd.close()
 
 class Mdprint:
 
   def __init__(self):
     self.out_md="/tmp/out.md"
-    self.out_html="/tmp/out.html"
     self.out_md_fd = open(self.out_md, 'w+')
-    self.out_html_fd = open(self.out_html, 'w+')
+    self.out_md_fd.write("[TOC]\n")
+    atexit.register(self.save_md_html)
 
   def write(self, content):
     self.out_md_fd.write(content)
 
   def write_table(self, table, headers):
+    out="\nSummary\n--------------\n"
+    self.write(out)
+
+    ''' add summary'''
+    total = ["Total"]
+    total.extend([sum(t[i] for t in table) for i in range(1, 5)])
+
+    table.append(total)
+    self.out_md_fd.write('\n')
     self.out_md_fd.write(tabulate(table, headers=headers, tablefmt="pipe"))
     self.out_md_fd.write('\n')
 
-  def __exit__(self):
-    close(self.out_md_fd)
-    close(self.out_html_fd)
+  def save_md_html(self):
+    self.out_md_fd.close()
+
+    with open("/tmp/out.html", 'w+') as f:
+      f.write(markdown.markdown(open(self.out_md, 'r').read(), extensions=['markdown.extensions.tables', 'markdown.extensions.toc']))
 
 bl = Blacklist()
 md = Mdprint()
@@ -128,6 +146,13 @@ def format_markdown(bugs):
     print >> sys.stderr, out
     md.write(out)
 
+def get_bugs_page(url):
+  try:
+    r = s.get(url)
+    # debugReq(r)
+    return r.text
+  except requests.exceptions.ConnectionError as e:
+    print >> sys.stderr, "Get list error"
 
 def get_bugs_list(uuid, status, reported_days = '0'):
   try:
@@ -153,7 +178,7 @@ def get_bugs_list(uuid, status, reported_days = '0'):
   except requests.exceptions.ConnectionError as e:
     print >> sys.stderr, "Get list error"
 
-users = ("LILIHE", "LLFENG", "XIALILI", "CHUTIAN", "WENWAWAN", "WENBOLI", "SHENGZHA", "YIZZHANG", "RMIAO", "ORZHANG")
+users = ("LILIHE", "LLFENG", "XIALILI", "XIALILI2", "CHUTIAN", "WENWAWAN", "WENBOLI", "SHENGZHA", "YIZZHANG", "RMIAO") #"ORZHANG"
 headers=["USER", "S1", "S2", "S3", "S4"]
 
 def _stat_serv(user, bugs):
@@ -176,34 +201,36 @@ def _stat_serv(user, bugs):
   return [user, s1, s2, s3, s4]
 
 def report_new_bugs_one_week():
-  out = "Reported this week\n==============\n"
+  out = "\nReported in this week\n==============\n"
   print >> sys.stderr, out
   md.write(out)
 
   stats = []
   for user in users:
-    out = "%s\n--------------\n" % (user, )
+    out = "\n%s\n--------------\n" % (user, )
     print >> sys.stderr, out
     md.write(out)
 
-    bugs = extract(get_bugs_list(user, "11", "7"))
+    url="https://bug.oraclecorp.com/pls/bug/WEBBUG_REPORTS.do_edit_report?rpt_title=&fcont_arr=%3D&fid_arr=159&fcont_arr=" + user + "&fid_arr=6&fcont_arr=&fid_arr=122&fcont_arr=AND&fid_arr=136&fcont_arr=&fid_arr=138&fcont_arr=7&fid_arr=9&fcont_arr=INTERNAL%25&fid_arr=200&fcont_arr=&fid_arr=10&fcont_arr=off&fid_arr=157&fcont_arr=2&fid_arr=100&cid_arr=2&cid_arr=3&cid_arr=9&cid_arr=8&cid_arr=7&cid_arr=30&cid_arr=11&cid_arr=6&cid_arr=5&cid_arr=51&cid_arr=13&f_count=10&c_count=11&query_type=2"
+    bugs = extract(get_bugs_page(url))
     stats.append(_stat_serv(user, bugs))
     format_markdown(bugs)
 
   md.write_table(stats, headers)
 
 def staff_bugs_all():
-  out = "Staff bugs\n=================\n"
+  out = "\nUnsolve bugs\n=================\n"
   print >> sys.stderr, out
   md.write(out)
 
   stats = []
   for user in users:
-    out = "%s\n--------------\n" % (user, )
+    out = "\n%s\n--------------\n" % (user, )
     print >> sys.stderr, out
     md.write(out)
 
-    bugs = extract(get_bugs_list(user, "11"))
+    url = "https://bug.oraclecorp.com/pls/bug/WEBBUG_REPORTS.do_edit_report?rpt_title=&fcont_arr=9&fid_arr=43&fcont_arr=60&fid_arr=42&fcont_arr=%3D&fid_arr=159&fcont_arr=" + user + "&fid_arr=6&fcont_arr=&fid_arr=122&fcont_arr=AND&fid_arr=136&fcont_arr=&fid_arr=138&fcont_arr=INTERNAL%25&fid_arr=200&fcont_arr=&fid_arr=10&fcont_arr=off&fid_arr=157&fcont_arr=2&fid_arr=100&cid_arr=2&cid_arr=3&cid_arr=9&cid_arr=8&cid_arr=7&cid_arr=30&cid_arr=11&cid_arr=6&cid_arr=5&cid_arr=51&cid_arr=13&f_count=11&c_count=11&query_type=2"
+    bugs = extract(get_bugs_page(url))
     stats.append(_stat_serv(user, bugs))
     format_markdown(bugs)
 
@@ -238,29 +265,20 @@ def _is_lastest_bugs(bug, in_days):
     return False
 
 def staff_completed_one_week():
-  out="Completed this week\n==================================\n"
+  out="\nCompleted in this week\n==================================\n"
   print >> sys.stderr, out
   md.write(out)
 
   stats = []
   for user in users:
-    out="%s\n--------------\n" % (user, )
+    out="\n%s\n--------------\n" % (user, )
     print >> sys.stderr, out
     md.write(out)
+    url="https://bug.oraclecorp.com/pls/bug/WEBBUG_REPORTS.do_edit_report?rpt_title=&fcont_arr=%3D&fid_arr=159&fcont_arr=" + user + "&fid_arr=6&fcont_arr=&fid_arr=122&fcont_arr=AND&fid_arr=136&fcont_arr=&fid_arr=138&fcont_arr=7&fid_arr=47&fcont_arr=INTERNAL%25&fid_arr=200&fcont_arr=&fid_arr=10&fcont_arr=off&fid_arr=157&fcont_arr=2&fid_arr=100&cid_arr=2&cid_arr=3&cid_arr=9&cid_arr=8&cid_arr=7&cid_arr=30&cid_arr=11&cid_arr=6&cid_arr=5&cid_arr=51&cid_arr=13&f_count=10&c_count=11&query_type=2"
+    bugs = extract(get_bugs_page(url))
+    stats.append(_stat_serv(user, bugs))
+    format_markdown(bugs)
 
-    bugs = extract(get_bugs_list(user, "0"))
-    completed_bugs = []
-    for bug in bugs:
-      if int(bug[7]) >= 60:
-        completed_bugs.append(bug)
-
-    rst = []
-    for bug in completed_bugs:
-      if _is_lastest_bugs(bug, 7):
-        rst.append(bug)
-
-    stats.append(_stat_serv(user, rst))
-    format_markdown(rst)
   md.write_table(stats, headers)
 
 
@@ -276,7 +294,6 @@ def main():
   staff_bugs_all()
   report_new_bugs_one_week()
   staff_completed_one_week()
-
 
 if __name__ == "__main__":
   main()
