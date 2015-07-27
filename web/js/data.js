@@ -1,0 +1,1 @@
+new Morris.Line({ element: 'bugs', data: [ { date: '2013-11-21', s1s2: 12, s3: 1, s4: 8}, { date: '2014-11-21', s1s2: 15, s3: 2, s4: 7}, { date: '2015-11-21', s1s2: 18, s3: 3, s4: 6}, { date: '2016-11-22', s1s2: 20, s3: 4, s4: 5}, ], xkey: 'date', ykeys: ['s1s2', 's3', 's4'], labels: ['s1-s2', 's3', 's4'], ymin: '0', xLabels: 'day', postUnits: '', });

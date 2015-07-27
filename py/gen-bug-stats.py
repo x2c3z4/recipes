@@ -52,7 +52,7 @@ class Mdprint:
 
     ''' add summary'''
     total = ["Total"]
-    total.extend([sum(t[i] for t in table) for i in range(1, 5)])
+    total.extend([sum(t[i] for t in table) for i in range(1, len(headers))])
 
     table.append(total)
     self.out_md_fd.write('\n')
@@ -128,13 +128,12 @@ def login(user, passwd):
   except requests.exceptions.ConnectionError as e:
     print >> sys.stderr, "login error"
 
-
 def extract(page):
   soup = BeautifulSoup(page, convertEntities=BeautifulSoup.HTML_ENTITIES)
   items = soup.find("tbody", attrs={'id':'data'}).findAll('tr', attrs={'style':'font-family:Arial,Helvetica,Geneva,sans-serif;font-size:9pt;'})
   bugs = []
   '''
-  [u'1.', u'', u'21450799', u'', u'15-JUL-15', u'LLFENG', u'2', u'11', u'Y', u'10006', u'KERNEL', u'12.0', u'12.0', u'devi lock timeout panic around scsi_hba_bus_config']
+  [u'1.', u'', u'21502504', u'', u'IO-MULTIPATH', u'24-JUL-15', u'YIZZHANG', u'2', u'11', u'Y', u'10006', u'KERNEL', u'11.3', u'11.3', u'rm-io panic at vhci_bind_transport+0x714']
   '''
   for item in items:
     bugs.append([i.text for i in item.findAll('td')])
@@ -142,8 +141,10 @@ def extract(page):
 
 def format_markdown(bugs):
   for bug in bugs:
-    out = "%s Bug [%s](https://bug.oraclecorp.com/pls/bug/webbug_print.show?c_rptno=%s) - %s\n"%(bug[0], bug[2], bug[2], bug[13])
-    print >> sys.stderr, out
+    # print >>sys.stderr, bug
+    out = "%s Bug [%s](https://bug.oraclecorp.com/pls/bug/webbug_print.show?c_rptno=%s) - %s\n\n"%(bug[0], bug[2], bug[2], bug[-1])
+    out = out + "\tPri:%s \tStatus:%s \tSub:%s \tRe:%s\n\n"%(bug[7], bug[8], bug[4], bug[-2])
+    # print >> sys.stderr, out
     md.write(out)
 
 def get_bugs_page(url):
@@ -179,7 +180,23 @@ def get_bugs_list(uuid, status, reported_days = '0'):
     print >> sys.stderr, "Get list error"
 
 users = ("LILIHE", "LLFENG", "XIALILI", "XIALILI2", "CHUTIAN", "WENWAWAN", "WENBOLI", "SHENGZHA", "YIZZHANG", "RMIAO") #"ORZHANG"
-headers=["USER", "S1", "S2", "S3", "S4"]
+# users = ("LILIHE", ) #"ORZHANG"
+headers_serverity=["USER", "S1", "S2", "S3", "S4"]
+headers_cata=["USER", "MPxIO", "SD/SCSA"]
+
+mpxio_subs=("IO-MULTIPATH", "LIBMPAPI", "LIBMPSCSI_VHCI", "MPATHADM")
+sd_scsa_subs=("SD-FIXED","SCSA","SES","SSD","LIBEFI","DISKFORMAT","CMLB","LIBFDISK","SCSI","FDISK","SASINFO","SDPARM","SG3UTILS","SMPUTILS")
+
+def _stat_cata(user, bugs):
+  s1 = 0
+  s2 = 0
+
+  for bug in bugs:
+    if bug[4].encode('utf8') in mpxio_subs:
+      s1 = s1 + 1
+    elif bug[4].encode('utf8') in sd_scsa_subs:
+      s2 = s2 + 1
+  return [user, s1, s2]
 
 def _stat_serv(user, bugs):
   s1 = 0
@@ -188,7 +205,7 @@ def _stat_serv(user, bugs):
   s4 = 0
 
   for bug in bugs:
-    ch = bug[6].encode('utf8')
+    ch = bug[7].encode('utf8')
     if ch is '1':
       s1 = s1 + 1
     elif ch is '2':
@@ -205,36 +222,45 @@ def report_new_bugs_one_week():
   print >> sys.stderr, out
   md.write(out)
 
-  stats = []
+  stats1 = []
+  stats2 = []
   for user in users:
     out = "\n%s\n--------------\n" % (user, )
     print >> sys.stderr, out
     md.write(out)
 
-    url="https://bug.oraclecorp.com/pls/bug/WEBBUG_REPORTS.do_edit_report?rpt_title=&fcont_arr=%3D&fid_arr=159&fcont_arr=" + user + "&fid_arr=6&fcont_arr=&fid_arr=122&fcont_arr=AND&fid_arr=136&fcont_arr=&fid_arr=138&fcont_arr=7&fid_arr=9&fcont_arr=INTERNAL%25&fid_arr=200&fcont_arr=&fid_arr=10&fcont_arr=off&fid_arr=157&fcont_arr=2&fid_arr=100&cid_arr=2&cid_arr=3&cid_arr=9&cid_arr=8&cid_arr=7&cid_arr=30&cid_arr=11&cid_arr=6&cid_arr=5&cid_arr=51&cid_arr=13&f_count=10&c_count=11&query_type=2"
+    url="https://bug.oraclecorp.com/pls/bug/WEBBUG_REPORTS.do_edit_report?rpt_title=&fcont_arr=%3D&fid_arr=159&fcont_arr=" + user + "&fid_arr=6&fcont_arr=&fid_arr=122&fcont_arr=AND&fid_arr=136&fcont_arr=&fid_arr=138&fcont_arr=7&fid_arr=9&fcont_arr=INTERNAL%25&fid_arr=200&fcont_arr=off&fid_arr=157&fcont_arr=2&fid_arr=100&cid_arr=2&cid_arr=15&cid_arr=3&cid_arr=9&cid_arr=8&cid_arr=7&cid_arr=30&cid_arr=11&cid_arr=6&cid_arr=5&cid_arr=51&cid_arr=13&f_count=9&c_count=12&query_type=2"
+    # print >>sys.stderr, url
     bugs = extract(get_bugs_page(url))
-    stats.append(_stat_serv(user, bugs))
+    stats1.append(_stat_serv(user, bugs))
+    stats2.append(_stat_cata(user, bugs))
     format_markdown(bugs)
 
-  md.write_table(stats, headers)
+  md.write_table(stats1, headers_serverity)
+  md.write_table(stats2, headers_cata)
 
 def staff_bugs_all():
   out = "\nUnsolve bugs\n=================\n"
   print >> sys.stderr, out
   md.write(out)
 
-  stats = []
+  stats1 = []
+  stats2 = []
   for user in users:
     out = "\n%s\n--------------\n" % (user, )
     print >> sys.stderr, out
     md.write(out)
 
-    url = "https://bug.oraclecorp.com/pls/bug/WEBBUG_REPORTS.do_edit_report?rpt_title=&fcont_arr=9&fid_arr=43&fcont_arr=60&fid_arr=42&fcont_arr=%3D&fid_arr=159&fcont_arr=" + user + "&fid_arr=6&fcont_arr=&fid_arr=122&fcont_arr=AND&fid_arr=136&fcont_arr=&fid_arr=138&fcont_arr=INTERNAL%25&fid_arr=200&fcont_arr=&fid_arr=10&fcont_arr=off&fid_arr=157&fcont_arr=2&fid_arr=100&cid_arr=2&cid_arr=3&cid_arr=9&cid_arr=8&cid_arr=7&cid_arr=30&cid_arr=11&cid_arr=6&cid_arr=5&cid_arr=51&cid_arr=13&f_count=11&c_count=11&query_type=2"
+    url = "https://bug.oraclecorp.com/pls/bug/WEBBUG_REPORTS.do_edit_report?rpt_title=&fcont_arr=9&fid_arr=43&fcont_arr=60&fid_arr=42&fcont_arr=%3D&fid_arr=159&fcont_arr=" + user + "&fid_arr=6&fcont_arr=&fid_arr=122&fcont_arr=AND&fid_arr=136&fcont_arr=&fid_arr=138&fcont_arr=INTERNAL%25&fid_arr=200&fcont_arr=off&fid_arr=157&fcont_arr=2&fid_arr=100&cid_arr=2&cid_arr=15&cid_arr=3&cid_arr=9&cid_arr=8&cid_arr=7&cid_arr=30&cid_arr=11&cid_arr=6&cid_arr=5&cid_arr=51&cid_arr=13&f_count=10&c_count=12&query_type=2"
+    # print >>sys.stderr, url
     bugs = extract(get_bugs_page(url))
-    stats.append(_stat_serv(user, bugs))
+    stats1.append(_stat_serv(user, bugs))
+    stats2.append(_stat_cata(user, bugs))
     format_markdown(bugs)
 
-  md.write_table(stats, headers)
+
+  md.write_table(stats1, headers_serverity)
+  md.write_table(stats2, headers_cata)
 
 
 def _is_lastest_bugs(bug, in_days):
@@ -269,17 +295,21 @@ def staff_completed_one_week():
   print >> sys.stderr, out
   md.write(out)
 
-  stats = []
+  stats1 = []
+  stats2 = []
   for user in users:
     out="\n%s\n--------------\n" % (user, )
     print >> sys.stderr, out
     md.write(out)
-    url="https://bug.oraclecorp.com/pls/bug/WEBBUG_REPORTS.do_edit_report?rpt_title=&fcont_arr=%3D&fid_arr=159&fcont_arr=" + user + "&fid_arr=6&fcont_arr=&fid_arr=122&fcont_arr=AND&fid_arr=136&fcont_arr=&fid_arr=138&fcont_arr=7&fid_arr=47&fcont_arr=INTERNAL%25&fid_arr=200&fcont_arr=&fid_arr=10&fcont_arr=off&fid_arr=157&fcont_arr=2&fid_arr=100&cid_arr=2&cid_arr=3&cid_arr=9&cid_arr=8&cid_arr=7&cid_arr=30&cid_arr=11&cid_arr=6&cid_arr=5&cid_arr=51&cid_arr=13&f_count=10&c_count=11&query_type=2"
+    url="https://bug.oraclecorp.com/pls/bug/WEBBUG_REPORTS.do_edit_report?rpt_title=&fcont_arr=%3D&fid_arr=159&fcont_arr=" + user + "&fid_arr=6&fcont_arr=&fid_arr=122&fcont_arr=AND&fid_arr=136&fcont_arr=&fid_arr=138&fcont_arr=7&fid_arr=47&fcont_arr=INTERNAL%25&fid_arr=200&fcont_arr=off&fid_arr=157&fcont_arr=2&fid_arr=100&cid_arr=2&cid_arr=15&cid_arr=3&cid_arr=9&cid_arr=8&cid_arr=7&cid_arr=30&cid_arr=11&cid_arr=6&cid_arr=5&cid_arr=51&cid_arr=13&f_count=9&c_count=12&query_type=2"
+    # print >>sys.stderr, url
     bugs = extract(get_bugs_page(url))
-    stats.append(_stat_serv(user, bugs))
+    stats1.append(_stat_serv(user, bugs))
+    stats2.append(_stat_cata(user, bugs))
     format_markdown(bugs)
 
-  md.write_table(stats, headers)
+  md.write_table(stats1, headers_serverity)
+  md.write_table(stats2, headers_cata)
 
 
 def main():
