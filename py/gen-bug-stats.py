@@ -41,7 +41,7 @@ class Blacklist:
 class Mdprint:
 
   def __init__(self):
-    self.out_md="/tmp/out.md"
+    self.out_md="/var/www/html/out.md"
     self.out_md_fd = open(self.out_md, 'w+')
     self.out_md_fd.write("[TOC]\n")
     atexit.register(self.save_md_html)
@@ -65,7 +65,7 @@ class Mdprint:
   def save_md_html(self):
     self.out_md_fd.close()
 
-    with open("/tmp/out.html", 'w+') as f:
+    with open("/var/www/html/out.html", 'w+') as f:
       f.write(markdown.markdown(open(self.out_md, 'r').read(), extensions=['markdown.extensions.tables', 'markdown.extensions.toc']))
 
 bl = Blacklist()
@@ -115,27 +115,213 @@ def debugReq(r):
   # print >>sys.stdout, r.text
   print >>sys.stdout, s.cookies.get_dict()
 
-
 def login(user, passwd):
   '''
-  1. Get site2pstoretoken from https://bug.oraclecorp.com/pls/bug/webbug_print.show?c_rptno=21189094
-  2.
+  Get hidden input
   '''
-  payload = {
-  'v':'v1.4',
-  'site2pstoretoken': 'v1.2~840F48D0~E6A73A53563BFCB99C31AE70E224BE860E0F4C21577ED9570B26D809E93574CB2F619286A2FA77F217F6EF66110F8C6E6413C9D4B10F0C9662813DC35881987A4132B95F104125D688BFC094312FCA9F59C9B02048A937E7935DC02BE685B2D34A800E10A6BDC62D77B28559C045C2667CC9E516A5E276BA27E27FC79D9AB1F0E0A6EF6444BEF4F872A82572AC8B380DAA5C3C5E718F86D09DF5D5411D0119AEE3C120DC72E595B9D46181D551068CE82D9EBFAAA24612AFF70DFD48194629F3A43B812F5C205F2FCDFEDECD4043DE3BA4C503328907C7FA8DB9CB7DD55FFC88',
-  'request_id':'8283486531936143424',
-  'source':'index_nav',
-  'OAM_REQ':'VERSION_4~T5nx%2fqs7i7spvPxOphnRYHTKiml46awhmgFe%2fGBQpuTaFoT5vYC09OA9aeaoldGxfA63vvGY73%2beQ%2fyWHtZjF9TCmKqWNqCe4zMeE6YJ1g7Wus6CRYmJYfH6eULbnn6iy85S6mUIPEIRPT5IPTDfFzhTHpGaJMoz24ckXzPFmm5UvStfc9XV7KqqXSneXRU6jS2ATmpy3Fz4TlD%2b60CAl5CxaseO2VzF7T1PE6BeAavtqyLPzAcgxlvYCBHftIeV%2bq%2bJQmXjwxmiswEs38UYQ5%2bsKzI3LZapxBoB%2fyIUEf7IRzxeafOiG4%2b7WW2Fn24HMG8Lg%2fFr09qbLOx%2bbbnfzR8Tt9MH0cKVbq7u9G766%2fM4uncQBrVX1LD79TdAQFULM2B3aTOBqH5dRN9tqTOWh%2f0STukb9wk%2f9qfzr%2bxJn2cHUOfD0RqMDkVY%2fY6F67UAoAZAc4DssUA3AeKniCX%2b6MdxoAw5NVZQrvz8A9jP0xY8mykzzqpNIUKNyLnePdBjKoA6CvPlaEEG3UrM9QzBCZNWQhYcUzMGDLqhjheepzmbVvpsu%2fNN%2bZ1nrHpHxBE9V8EHqO4KAzWQBkdqvhk4w2ePKnuIbwbdzq%2fJYhBzZe4hCSbV7Rkk3mvFqdFl9d3sumizsEDveyVlUj0aIpPmOvmM%2feGT14hOEDKrZcWUMzdhOMmfRqp%2bS5jzLwcMQ1eFCL4Af0oNJHkq1IcVYcqXVezqYHsSM1GyUewu4iN0uz8dfShR9mGFDwQk3gXJxwWt6rmmnMUWePEPIUv9xkhyJjk46c%2fuRX%2fJkeQb1ZHisgKleC8c4zqmMF4t7L4gpqrE5vn2DjWnq7nLp7Lnt8F3CRANVGJsNmI%2fuDaFvboXSzcd84bCeQuUsnGWv8JCXSbEZAiW2EeOCLnmxHrHSptptZj7wVchvCF4znCx%2fjJsB4rPvRUO0%2fkwUFX9pBYpOu52EX81aNJv6CPIHmVMopqPVTahV4RxWMhKtXld9M2etAh4jlkBwz6o0om%2fAgMKYyNsTJLoIYbJaXLGUMYPpRV4toIwUJVb%2bR86Y1rFjnY%2fyeI7wvaLOlmR%2bu7I15AKFHZAivShuQ9NkAYm6tzOUA%2frk8A6bWeOk5UcqqR29Pxbej89HqnSIEPDi3TGZhzUJHz8XmXYVwXy7PgIwv4d64To8s2E%2bwRIzWShc%2fPWPUE%2bAiV%2fJT2TOk0qaDJsmFIEgNSpQHDYTjE9gkc9alSmcZIRLFm7rJW60i6jy5Ko6qrjV0rjIkmIMkDo9aQD4RDDSeNZBCeLh2dAdlWEnPcSGN3prPp3mzp1l9LiqNBwNnEtsI90Kmw9TJl5d%2bc3FWCViaE23Woo%2bUhxJB5WWcDFeakGfWw8dhL%2f5mB7K3tOpr3ONTKYowz5aRLG28o9CL%2fZhDYRRHm6Qo41MWBLTIC%2bES0TTiR1DH%2be%2bVgE4fgKjQLdvDaG3utkJNcJ3uEmDA0yvSFPAodjTamkdh49YSYy4RC3AaKp8Et7p7IHMGTj%2bUqZXkzwmX2oLq2ueQeip3r4Ztc9tguJhCtZuYLfcJUufIV6MdkPN3uiF0vzoGDOoH0ngJumJXTNWwO2jW9HcoQVyA97%2flhseVk0PCqavFRCiOIWevic%2fjiVbXQcCFUJi6PrPknLDq5XZrtz5zjTBpJUoMmD',
-  'site2pstoretoken':'v1.4~7A14C962~77456B99BCD3B25EA25BD81D9B0F5BF45F2FF80242A4B8EE5871F67E3B02484C505F35273C5C931A2C0CA6F32F695F94B4F0F1515AD3D9E2DE8ED4F20BC82F8201DDEBE82ECFD83879670FBE2CA209617A103AB640DBC2779422F8E4C28A7E97F49C2FF11BE22F40B6AAED3379A030ED34C47E6B7EEA5B2C7E8443EF890B0DCE51F06F1FCD71FDD9672870215E9C4E7D14D6B06DD63E7C682FA80D0EFF1F9DA36D0B21C673827474',
-  'ssousername':user,
-  'password':passwd,
-  }
+  TMP_URL='https://gmp.oracle.com/captcha/'
+  r = s.get(TMP_URL)
+  #debugReq(r)
+  soup = BeautifulSoup(r.text)
+  hidden_tags = soup.findAll("input", type="hidden")
+  hidden_dict = {}
+  payload = {}
+  for tag in hidden_tags:
+      hidden_dict[tag['name']] = tag['value']
+
+  for tag in ('v', 'request_id', 'OAM_REQ', 'site2pstoretoken', 'locale'):
+    payload[tag] = hidden_dict[tag]
+  payload['ssousername'] = user,
+  payload['password'] = passwd,
   try:
     r = s.post(LOGIN_URL,data = payload)
     #debugReq(r)
   except requests.exceptions.ConnectionError as e:
-    print >> sys.stderr, "login error"
+    print "login error"
+def login(user, passwd):
+  '''
+  Get hidden input
+  '''
+  TMP_URL='https://gmp.oracle.com/captcha/'
+  r = s.get(TMP_URL)
+  #debugReq(r)
+  soup = BeautifulSoup(r.text)
+  hidden_tags = soup.findAll("input", type="hidden")
+  hidden_dict = {}
+  payload = {}
+  for tag in hidden_tags:
+      hidden_dict[tag['name']] = tag['value']
+
+  for tag in ('v', 'request_id', 'OAM_REQ', 'site2pstoretoken', 'locale'):
+    payload[tag] = hidden_dict[tag]
+  payload['ssousername'] = user,
+  payload['password'] = passwd,
+  try:
+    r = s.post(LOGIN_URL,data = payload)
+    #debugReq(r)
+  except requests.exceptions.ConnectionError as e:
+    print "login error"
+def login(user, passwd):
+  '''
+  Get hidden input
+  '''
+  TMP_URL='https://gmp.oracle.com/captcha/'
+  r = s.get(TMP_URL)
+  #debugReq(r)
+  soup = BeautifulSoup(r.text)
+  hidden_tags = soup.findAll("input", type="hidden")
+  hidden_dict = {}
+  payload = {}
+  for tag in hidden_tags:
+      hidden_dict[tag['name']] = tag['value']
+
+  for tag in ('v', 'request_id', 'OAM_REQ', 'site2pstoretoken', 'locale'):
+    payload[tag] = hidden_dict[tag]
+  payload['ssousername'] = user,
+  payload['password'] = passwd,
+  try:
+    r = s.post(LOGIN_URL,data = payload)
+    #debugReq(r)
+  except requests.exceptions.ConnectionError as e:
+    print "login error"
+def login(user, passwd):
+  '''
+  Get hidden input
+  '''
+  TMP_URL='https://gmp.oracle.com/captcha/'
+  r = s.get(TMP_URL)
+  #debugReq(r)
+  soup = BeautifulSoup(r.text)
+  hidden_tags = soup.findAll("input", type="hidden")
+  hidden_dict = {}
+  payload = {}
+  for tag in hidden_tags:
+      hidden_dict[tag['name']] = tag['value']
+
+  for tag in ('v', 'request_id', 'OAM_REQ', 'site2pstoretoken', 'locale'):
+    payload[tag] = hidden_dict[tag]
+  payload['ssousername'] = user,
+  payload['password'] = passwd,
+  try:
+    r = s.post(LOGIN_URL,data = payload)
+    #debugReq(r)
+  except requests.exceptions.ConnectionError as e:
+    print "login error"
+def login(user, passwd):
+  '''
+  Get hidden input
+  '''
+  TMP_URL='https://gmp.oracle.com/captcha/'
+  r = s.get(TMP_URL)
+  #debugReq(r)
+  soup = BeautifulSoup(r.text)
+  hidden_tags = soup.findAll("input", type="hidden")
+  hidden_dict = {}
+  payload = {}
+  for tag in hidden_tags:
+      hidden_dict[tag['name']] = tag['value']
+
+  for tag in ('v', 'request_id', 'OAM_REQ', 'site2pstoretoken', 'locale'):
+    payload[tag] = hidden_dict[tag]
+  payload['ssousername'] = user,
+  payload['password'] = passwd,
+  try:
+    r = s.post(LOGIN_URL,data = payload)
+    #debugReq(r)
+  except requests.exceptions.ConnectionError as e:
+    print "login error"
+def login(user, passwd):
+  '''
+  Get hidden input
+  '''
+  TMP_URL='https://gmp.oracle.com/captcha/'
+  r = s.get(TMP_URL)
+  #debugReq(r)
+  soup = BeautifulSoup(r.text)
+  hidden_tags = soup.findAll("input", type="hidden")
+  hidden_dict = {}
+  payload = {}
+  for tag in hidden_tags:
+      hidden_dict[tag['name']] = tag['value']
+
+  for tag in ('v', 'request_id', 'OAM_REQ', 'site2pstoretoken', 'locale'):
+    payload[tag] = hidden_dict[tag]
+  payload['ssousername'] = user,
+  payload['password'] = passwd,
+  try:
+    r = s.post(LOGIN_URL,data = payload)
+    #debugReq(r)
+  except requests.exceptions.ConnectionError as e:
+    print "login error"
+def login(user, passwd):
+  '''
+  Get hidden input
+  '''
+  TMP_URL='https://gmp.oracle.com/captcha/'
+  r = s.get(TMP_URL)
+  #debugReq(r)
+  soup = BeautifulSoup(r.text)
+  hidden_tags = soup.findAll("input", type="hidden")
+  hidden_dict = {}
+  payload = {}
+  for tag in hidden_tags:
+      hidden_dict[tag['name']] = tag['value']
+
+  for tag in ('v', 'request_id', 'OAM_REQ', 'site2pstoretoken', 'locale'):
+    payload[tag] = hidden_dict[tag]
+  payload['ssousername'] = user,
+  payload['password'] = passwd,
+  try:
+    r = s.post(LOGIN_URL,data = payload)
+    #debugReq(r)
+  except requests.exceptions.ConnectionError as e:
+    print "login error"
+def login(user, passwd):
+  '''
+  Get hidden input
+  '''
+  TMP_URL='https://gmp.oracle.com/captcha/'
+  r = s.get(TMP_URL)
+  #debugReq(r)
+  soup = BeautifulSoup(r.text)
+  hidden_tags = soup.findAll("input", type="hidden")
+  hidden_dict = {}
+  payload = {}
+  for tag in hidden_tags:
+      hidden_dict[tag['name']] = tag['value']
+
+  for tag in ('v', 'request_id', 'OAM_REQ', 'site2pstoretoken', 'locale'):
+    payload[tag] = hidden_dict[tag]
+  payload['ssousername'] = user,
+  payload['password'] = passwd,
+  try:
+    r = s.post(LOGIN_URL,data = payload)
+    #debugReq(r)
+  except requests.exceptions.ConnectionError as e:
+    print "login error"
+def login(user, passwd):
+  '''
+  Get hidden input
+  '''
+  TMP_URL='https://gmp.oracle.com/captcha/'
+  r = s.get(TMP_URL)
+  #debugReq(r)
+  soup = BeautifulSoup(r.text)
+  hidden_tags = soup.findAll("input", type="hidden")
+  hidden_dict = {}
+  payload = {}
+  for tag in hidden_tags:
+      hidden_dict[tag['name']] = tag['value']
+
+  for tag in ('v', 'request_id', 'OAM_REQ', 'site2pstoretoken', 'locale'):
+    payload[tag] = hidden_dict[tag]
+  payload['ssousername'] = user,
+  payload['password'] = passwd,
+  try:
+    r = s.post(LOGIN_URL,data = payload)
+    #debugReq(r)
+  except requests.exceptions.ConnectionError as e:
+    print "login error"
 
 def extract(page):
   soup = BeautifulSoup(page, convertEntities=BeautifulSoup.HTML_ENTITIES)
