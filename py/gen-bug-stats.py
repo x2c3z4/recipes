@@ -16,6 +16,7 @@ import markdown
 import codecs
 import atexit
 from optparse import OptionParser
+from time import gmtime, strftime
 # from markdown.extensions.toc import TocExtension
 
 matched_re = ""
@@ -98,7 +99,7 @@ def patch_send():
         return old_send(self, data) #return is not necessary, but never hurts, in case the library is changed
     httplib.HTTPConnection.send= new_send
 
-patch_send()
+#patch_send()
 
 
 def get_credentials(mach):
@@ -403,7 +404,7 @@ def get_bugs_list(uuid, status, reported_days = '0'):
     print >> sys.stderr, "Get list error"
 
 #users = ("LILIHE", "LLFENG", "XIALILI", "XIALILI2", "CHUTIAN", "WENWAWAN", "WENBOLI", "SHENGZHA", "YIZZHANG", "RMIAO") #"ORZHANG"
-users = ("LLFENG", ) #"ORZHANG"
+users = ("LLFENG", "CHUTIAN", "WENWAWAN", "HEMZHAO") #"ORZHANG"
 headers_serverity=["USER", "S1", "S2", "S3", "S4"]
 headers_cata=["USER", "MPxIO", "SD/SCSA"]
 
@@ -441,7 +442,8 @@ def _stat_serv(user, bugs):
   return [user, s1, s2, s3, s4]
 
 def report_new_bugs_one_week():
-  out = "\nReported in this week\n==============\n"
+  out = "\nReported in this week(%s)\n==============\n" % (
+          strftime("%Y-%m-%d", gmtime()),)
   print >> sys.stderr, out
   md.write(out)
 
@@ -465,7 +467,8 @@ def report_new_bugs_one_week():
   md.write_table(stats2, headers_cata)
 
 def staff_bugs_all():
-  out = "\nUnsolve bugs\n=================\n"
+  out = "\nUnsolve bugs(%s)\n=================\n" % (
+          strftime("%Y-%m-%d", gmtime()),)
   print >> sys.stderr, out
   md.write(out)
 
@@ -499,7 +502,6 @@ def _is_lastest_bugs(bug, in_days):
   r = s.get(url)
   soup = BeautifulSoup(r.text, convertEntities=BeautifulSoup.HTML_ENTITIES)
   items = soup.findAll('b')
-  print url
 
   content = ""
   for i in reversed(items):
@@ -518,7 +520,8 @@ def _is_lastest_bugs(bug, in_days):
     return False
 
 def staff_completed_one_week():
-  out="\nCompleted in this week\n==================================\n"
+  out="\nCompleted in this week(%s)\n==================================\n" % (
+          strftime("%Y-%m-%d", gmtime()),)
   print >> sys.stderr, out
   md.write(out)
 
@@ -531,7 +534,6 @@ def staff_completed_one_week():
     url = "https://bug.oraclecorp.com/pls/bug/WEBBUG_REPORTS.do_edit_report?rpt_title=&fcont_arr=70&fid_arr=43&fcont_arr=100&fid_arr=42&fcont_arr=%3D&fid_arr=159&fcont_arr=" + user + "&fid_arr=6&fcont_arr=&fid_arr=122&fcont_arr=AND&fid_arr=136&fcont_arr=&fid_arr=138&fcont_arr=7&fid_arr=47&fcont_arr=INTERNAL%25&fid_arr=200&fcont_arr=&fid_arr=10&fcont_arr=off&fid_arr=157&fcont_arr=2&fid_arr=100&cid_arr=2&cid_arr=3&cid_arr=14&cid_arr=9&cid_arr=8&cid_arr=7&cid_arr=11&cid_arr=6&cid_arr=15&cid_arr=5&cid_arr=51&cid_arr=13&f_count=12&c_count=12&query_type=2"
 
     #url="https://bug.oraclecorp.com/pls/bug/WEBBUG_REPORTS.do_edit_report?rpt_title=&fcont_arr=%3D&fid_arr=159&fcont_arr=" + user + "&fid_arr=6&fcont_arr=&fid_arr=122&fcont_arr=AND&fid_arr=136&fcont_arr=&fid_arr=138&fcont_arr=7&fid_arr=47&fcont_arr=INTERNAL%25&fid_arr=200&fcont_arr=off&fid_arr=157&fcont_arr=2&fid_arr=100&cid_arr=2&cid_arr=15&cid_arr=3&cid_arr=9&cid_arr=8&cid_arr=7&cid_arr=30&cid_arr=11&cid_arr=6&cid_arr=5&cid_arr=51&cid_arr=13&f_count=9&c_count=12&query_type=2"
-    print >>sys.stderr, url
     bugs = extract(get_bugs_page(url))
     stats1.append(_stat_serv(user, bugs))
     stats2.append(_stat_cata(user, bugs))
