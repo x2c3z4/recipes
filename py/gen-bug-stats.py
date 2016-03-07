@@ -20,7 +20,7 @@ from time import gmtime, strftime
 # from markdown.extensions.toc import TocExtension
 
 matched_re = ""
-output_dir="/var/www/html/"
+output="/var/www/html/bugs.html"
 bl = None
 md = None
 class Blacklist:
@@ -44,7 +44,8 @@ class Blacklist:
 
 class Mdprint:
   def __init__(self):
-    self.out_md=os.path.join(output_dir, "bugs.md")
+    self.out_base,_=os.path.splitext(output)
+    self.out_md= self.out_base + ".md"
     self.out_md_fd = open(self.out_md, 'w+')
     self.out_md_fd.write("[TOC]\n")
     atexit.register(self.save_md_html)
@@ -71,7 +72,7 @@ class Mdprint:
   def save_md_html(self):
     self.out_md_fd.close()
 
-    with open(os.path.join(output_dir, "bugs.html"), 'w+') as f:
+    with open(self.out_base + ".html", 'w+') as f:
       f.write(markdown.markdown(open(self.out_md, 'r').read(), extensions=['markdown.extensions.tables', 'markdown.extensions.toc']))
 
 
@@ -552,17 +553,17 @@ def staff_completed_one_week():
 
 
 def main():
-  global matched_re,output_dir
+  global matched_re,output
   global bl, md
   parser = OptionParser(usage='%prog [options] [word]', description='checkout')
   parser.add_option("-r", "--re", type="string", help='get only match re, like 12.0')
-  parser.add_option("-o", "--output_dir", type="string", help='output dir, default /var/www/html/')
+  parser.add_option("-o", "--output", type="string", help='output file, default /var/www/html/bugs.html')
   (options, args) = parser.parse_args()
   if options.re:
       matched_re = options.re
 
-  if options.output_dir:
-      output_dir = options.output_dir
+  if options.output:
+      output = options.output
   #if not os.path.exists(COOKIE_FILE):
   bl = Blacklist()
   md = Mdprint()
