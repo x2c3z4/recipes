@@ -20,6 +20,9 @@ from time import gmtime, strftime
 # from markdown.extensions.toc import TocExtension
 
 matched_re = ""
+output_dir="/var/www/html/"
+bl = None
+md = None
 class Blacklist:
 
   def __init__(self):
@@ -40,9 +43,8 @@ class Blacklist:
     self.fd.close()
 
 class Mdprint:
-
   def __init__(self):
-    self.out_md="/var/www/html/out.md"
+    self.out_md=os.path.join(output_dir, "bugs.md")
     self.out_md_fd = open(self.out_md, 'w+')
     self.out_md_fd.write("[TOC]\n")
     atexit.register(self.save_md_html)
@@ -50,27 +52,28 @@ class Mdprint:
   def write(self, content):
     self.out_md_fd.write(content)
 
-  def write_table(self, table, headers):
-    out="\nSummary\n--------------\n"
-    self.write(out)
+  def write_table(self, title, table, headers, has_stats):
+    title = "\n%s\n-----\n" % (title,)
+    self.write(title)
 
-    ''' add summary'''
-    total = ["Total"]
-    total.extend([sum(t[i] for t in table) for i in range(1, len(headers))])
+    if len(table) == 0:
+        return
 
-    table.append(total)
+    if has_stats:
+        ''' add summary'''
+        total = ["Total"]
+        total.extend([sum(t[i] for t in table) for i in range(1, len(headers))])
+        table.append(total)
     self.out_md_fd.write('\n')
-    self.out_md_fd.write(tabulate(table, headers=headers, tablefmt="pipe"))
+    self.out_md_fd.write(tabulate(table, headers=headers, tablefmt="html"))
     self.out_md_fd.write('\n')
 
   def save_md_html(self):
     self.out_md_fd.close()
 
-    with open("/var/www/html/out.html", 'w+') as f:
+    with open(os.path.join(output_dir, "bugs.html"), 'w+') as f:
       f.write(markdown.markdown(open(self.out_md, 'r').read(), extensions=['markdown.extensions.tables', 'markdown.extensions.toc']))
 
-bl = Blacklist()
-md = Mdprint()
 
 COOKIE_FILE='/tmp/.oracle.cookies'
 LOGIN_URL = 'https://login.oracle.com/oam/server/sso/auth_cred_submit'
@@ -337,39 +340,44 @@ def extract(page):
 
   for tmp in tmps:
     bug = {}
-    bug["bid"] = (tmp[0], "")
-    bug["bugno"] = (tmp[-13], "")
-    bug["subject"] = (tmp[-1], "Subject")
-    bug["0"] = "%s Bug [%s](https://bug.oraclecorp.com/pls/bug/webbug_print.show?c_rptno=%s) - %s\n"%(bug["bid"][0], bug["bugno"][0], bug["bugno"][0], bug["subject"][0])
+    bug["bugno"] = tmp[-13]
+    bug["subject"] = tmp[-1]
+    bug["bugno"] = '<a href="https://bug.oraclecorp.com/pls/bug/webbug_print.show?c_rptno=%s">%s</a>' %(bug["bugno"],bug["bugno"])
     # useful
-    bug["reported_date"] = (tmp[-11], "Reported date")
-    bug["reported_by"] = (tmp[-10],"Reported by")
-    bug["serverity"] = (tmp[-8], "Serverity")
-    bug["status"] = (tmp[-7], "Status")
-    bug["subcomponent"] = (tmp[-4], "Subcomponent")
-    bug["re"] = (tmp[-2], "Re")
+    bug["reported_date"] = tmp[-11]
+    bug["reported_by"] = tmp[-10]
+    bug["serverity"] = tmp[-8]
+    bug["status"] = tmp[-7]
+    bug["subcomponent"] = tmp[-4]
+    bug["re"] = tmp[-2]
 
-    if len(matched_re) ==0 or bug["re"][0].encode("utf8") == matched_re:
+    if len(matched_re) ==0 or bug["re"].encode("utf8") == matched_re:
       bugs.append(bug)
 
   return bugs
 
 def format_markdown(bugs):
+  headers =['Id', 'Bugno', 'Subject', 'Reported date', 'Reported by', 'Serverity', 'Status', 'Sub', 'Re']
+
+  bugs_list = []
   for bug in bugs:
-    desc_list = []
-    # print >>sys.stderr, bug
-    out = bug["0"]
-    desc_list.append(bug["reported_by"])
-    desc_list.append(bug["reported_date"])
-    desc_list.append(bug["serverity"])
-    desc_list.append(bug["status"])
-    desc_list.append(bug["subcomponent"])
-    desc_list.append(bug["re"])
+    bug_list = []
+    bug_list.append(bug["bugno"])
+    bug_list.append(bug["subject"])
+    bug_list.append(bug["reported_date"])
+    bug_list.append(bug["reported_by"])
+    bug_list.append(bug["serverity"])
+    bug_list.append(bug["status"])
+    bug_list.append(bug["subcomponent"])
+    bug_list.append(bug["re"])
+#    bug_list.append(bug["link"])
+    bugs_list.append(bug_list)
+  bugs_list = sorted(bugs_list, key = lambda bug_list: bug_list[4])
 
-    out += "\t".join([item[1] + ":" + item[0]  for item in desc_list]) + "\n\n"
-    print out
+  for k,v in enumerate(bugs_list):
+    v.insert(0, k + 1)
+  md.write_table("", bugs_list, headers, False)
 
-    md.write(out)
 
 def get_bugs_page(url):
   try:
@@ -404,7 +412,7 @@ def get_bugs_list(uuid, status, reported_days = '0'):
     print >> sys.stderr, "Get list error"
 
 #users = ("LILIHE", "LLFENG", "XIALILI", "XIALILI2", "CHUTIAN", "WENWAWAN", "WENBOLI", "SHENGZHA", "YIZZHANG", "RMIAO") #"ORZHANG"
-users = ("LLFENG", "CHUTIAN", "WENWAWAN", "HEMZHAO") #"ORZHANG"
+users = ("LLFENG", "CHUTIAN", "WENWAWAN", "HEMZHAO", "CHORNE", "MMUZIK", "ORZHANG")
 headers_serverity=["USER", "S1", "S2", "S3", "S4"]
 headers_cata=["USER", "MPxIO", "SD/SCSA"]
 
@@ -416,9 +424,9 @@ def _stat_cata(user, bugs):
   s2 = 0
 
   for bug in bugs:
-    if bug["subcomponent"][0].encode('utf8') in mpxio_subs:
+    if bug["subcomponent"].encode('utf8') in mpxio_subs:
       s1 = s1 + 1
-    elif bug["subcomponent"][0].encode('utf8') in sd_scsa_subs:
+    elif bug["subcomponent"].encode('utf8') in sd_scsa_subs:
       s2 = s2 + 1
   return [user, s1, s2]
 
@@ -429,7 +437,7 @@ def _stat_serv(user, bugs):
   s4 = 0
 
   for bug in bugs:
-    ch = bug["serverity"][0].encode('utf8')
+    ch = bug["serverity"].encode('utf8')
     if ch is '1':
       s1 = s1 + 1
     elif ch is '2':
@@ -463,8 +471,8 @@ def report_new_bugs_one_week():
     stats2.append(_stat_cata(user, bugs))
     format_markdown(bugs)
 
-  md.write_table(stats1, headers_serverity)
-  md.write_table(stats2, headers_cata)
+  md.write_table("Serverity Summary", stats1, headers_serverity, True)
+  md.write_table("User Summary", stats2, headers_cata, True)
 
 def staff_bugs_all():
   out = "\nUnsolve bugs(%s)\n=================\n" % (
@@ -489,8 +497,8 @@ def staff_bugs_all():
     format_markdown(bugs)
 
 
-  md.write_table(stats1, headers_serverity)
-  md.write_table(stats2, headers_cata)
+  md.write_table("Serverity Summary", stats1, headers_serverity, True)
+  md.write_table("User Summary", stats2, headers_cata, True)
 
 
 def _is_lastest_bugs(bug, in_days):
@@ -539,19 +547,25 @@ def staff_completed_one_week():
     stats2.append(_stat_cata(user, bugs))
     format_markdown(bugs)
 
-  md.write_table(stats1, headers_serverity)
-  md.write_table(stats2, headers_cata)
+  md.write_table("Serverity Summary", stats1, headers_serverity, True)
+  md.write_table("User Summary", stats2, headers_cata, True)
 
 
 def main():
-  global matched_re
+  global matched_re,output_dir
+  global bl, md
   parser = OptionParser(usage='%prog [options] [word]', description='checkout')
   parser.add_option("-r", "--re", type="string", help='get only match re, like 12.0')
+  parser.add_option("-o", "--output_dir", type="string", help='output dir, default /var/www/html/')
   (options, args) = parser.parse_args()
   if options.re:
       matched_re = options.re
 
+  if options.output_dir:
+      output_dir = options.output_dir
   #if not os.path.exists(COOKIE_FILE):
+  bl = Blacklist()
+  md = Mdprint()
   if True:
     (user, passwd) = get_credentials('oracle')
     login(user, passwd)
