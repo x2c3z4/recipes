@@ -54,7 +54,7 @@ class Mdprint:
     self.out_md_fd.write(content)
 
   def write_table(self, title, table, headers, has_stats):
-    title = "\n%s\n-----\n" % (title,)
+    title = "\n[%s](#)\n--------\n--------\n" % (title,)
     self.write(title)
 
     if len(table) == 0:
@@ -143,190 +143,6 @@ def login(user, passwd):
     #debugReq(r)
   except requests.exceptions.ConnectionError as e:
     print "login error"
-def login(user, passwd):
-  '''
-  Get hidden input
-  '''
-  TMP_URL='https://gmp.oracle.com/captcha/'
-  r = s.get(TMP_URL)
-  #debugReq(r)
-  soup = BeautifulSoup(r.text)
-  hidden_tags = soup.findAll("input", type="hidden")
-  hidden_dict = {}
-  payload = {}
-  for tag in hidden_tags:
-      hidden_dict[tag['name']] = tag['value']
-
-  for tag in ('v', 'request_id', 'OAM_REQ', 'site2pstoretoken', 'locale'):
-    payload[tag] = hidden_dict[tag]
-  payload['ssousername'] = user,
-  payload['password'] = passwd,
-  try:
-    r = s.post(LOGIN_URL,data = payload)
-    #debugReq(r)
-  except requests.exceptions.ConnectionError as e:
-    print "login error"
-def login(user, passwd):
-  '''
-  Get hidden input
-  '''
-  TMP_URL='https://gmp.oracle.com/captcha/'
-  r = s.get(TMP_URL)
-  #debugReq(r)
-  soup = BeautifulSoup(r.text)
-  hidden_tags = soup.findAll("input", type="hidden")
-  hidden_dict = {}
-  payload = {}
-  for tag in hidden_tags:
-      hidden_dict[tag['name']] = tag['value']
-
-  for tag in ('v', 'request_id', 'OAM_REQ', 'site2pstoretoken', 'locale'):
-    payload[tag] = hidden_dict[tag]
-  payload['ssousername'] = user,
-  payload['password'] = passwd,
-  try:
-    r = s.post(LOGIN_URL,data = payload)
-    #debugReq(r)
-  except requests.exceptions.ConnectionError as e:
-    print "login error"
-def login(user, passwd):
-  '''
-  Get hidden input
-  '''
-  TMP_URL='https://gmp.oracle.com/captcha/'
-  r = s.get(TMP_URL)
-  #debugReq(r)
-  soup = BeautifulSoup(r.text)
-  hidden_tags = soup.findAll("input", type="hidden")
-  hidden_dict = {}
-  payload = {}
-  for tag in hidden_tags:
-      hidden_dict[tag['name']] = tag['value']
-
-  for tag in ('v', 'request_id', 'OAM_REQ', 'site2pstoretoken', 'locale'):
-    payload[tag] = hidden_dict[tag]
-  payload['ssousername'] = user,
-  payload['password'] = passwd,
-  try:
-    r = s.post(LOGIN_URL,data = payload)
-    #debugReq(r)
-  except requests.exceptions.ConnectionError as e:
-    print "login error"
-def login(user, passwd):
-  '''
-  Get hidden input
-  '''
-  TMP_URL='https://gmp.oracle.com/captcha/'
-  r = s.get(TMP_URL)
-  #debugReq(r)
-  soup = BeautifulSoup(r.text)
-  hidden_tags = soup.findAll("input", type="hidden")
-  hidden_dict = {}
-  payload = {}
-  for tag in hidden_tags:
-      hidden_dict[tag['name']] = tag['value']
-
-  for tag in ('v', 'request_id', 'OAM_REQ', 'site2pstoretoken', 'locale'):
-    payload[tag] = hidden_dict[tag]
-  payload['ssousername'] = user,
-  payload['password'] = passwd,
-  try:
-    r = s.post(LOGIN_URL,data = payload)
-    #debugReq(r)
-  except requests.exceptions.ConnectionError as e:
-    print "login error"
-def login(user, passwd):
-  '''
-  Get hidden input
-  '''
-  TMP_URL='https://gmp.oracle.com/captcha/'
-  r = s.get(TMP_URL)
-  #debugReq(r)
-  soup = BeautifulSoup(r.text)
-  hidden_tags = soup.findAll("input", type="hidden")
-  hidden_dict = {}
-  payload = {}
-  for tag in hidden_tags:
-      hidden_dict[tag['name']] = tag['value']
-
-  for tag in ('v', 'request_id', 'OAM_REQ', 'site2pstoretoken', 'locale'):
-    payload[tag] = hidden_dict[tag]
-  payload['ssousername'] = user,
-  payload['password'] = passwd,
-  try:
-    r = s.post(LOGIN_URL,data = payload)
-    #debugReq(r)
-  except requests.exceptions.ConnectionError as e:
-    print "login error"
-def login(user, passwd):
-  '''
-  Get hidden input
-  '''
-  TMP_URL='https://gmp.oracle.com/captcha/'
-  r = s.get(TMP_URL)
-  #debugReq(r)
-  soup = BeautifulSoup(r.text)
-  hidden_tags = soup.findAll("input", type="hidden")
-  hidden_dict = {}
-  payload = {}
-  for tag in hidden_tags:
-      hidden_dict[tag['name']] = tag['value']
-
-  for tag in ('v', 'request_id', 'OAM_REQ', 'site2pstoretoken', 'locale'):
-    payload[tag] = hidden_dict[tag]
-  payload['ssousername'] = user,
-  payload['password'] = passwd,
-  try:
-    r = s.post(LOGIN_URL,data = payload)
-    #debugReq(r)
-  except requests.exceptions.ConnectionError as e:
-    print "login error"
-def login(user, passwd):
-  '''
-  Get hidden input
-  '''
-  TMP_URL='https://gmp.oracle.com/captcha/'
-  r = s.get(TMP_URL)
-  #debugReq(r)
-  soup = BeautifulSoup(r.text)
-  hidden_tags = soup.findAll("input", type="hidden")
-  hidden_dict = {}
-  payload = {}
-  for tag in hidden_tags:
-      hidden_dict[tag['name']] = tag['value']
-
-  for tag in ('v', 'request_id', 'OAM_REQ', 'site2pstoretoken', 'locale'):
-    payload[tag] = hidden_dict[tag]
-  payload['ssousername'] = user,
-  payload['password'] = passwd,
-  try:
-    r = s.post(LOGIN_URL,data = payload)
-    #debugReq(r)
-  except requests.exceptions.ConnectionError as e:
-    print "login error"
-def login(user, passwd):
-  '''
-  Get hidden input
-  '''
-  TMP_URL='https://gmp.oracle.com/captcha/'
-  r = s.get(TMP_URL)
-  #debugReq(r)
-  soup = BeautifulSoup(r.text)
-  hidden_tags = soup.findAll("input", type="hidden")
-  hidden_dict = {}
-  payload = {}
-  for tag in hidden_tags:
-      hidden_dict[tag['name']] = tag['value']
-
-  for tag in ('v', 'request_id', 'OAM_REQ', 'site2pstoretoken', 'locale'):
-    payload[tag] = hidden_dict[tag]
-  payload['ssousername'] = user,
-  payload['password'] = passwd,
-  try:
-    r = s.post(LOGIN_URL,data = payload)
-    #debugReq(r)
-  except requests.exceptions.ConnectionError as e:
-    print "login error"
 
 def extract(page):
   soup = BeautifulSoup(page, convertEntities=BeautifulSoup.HTML_ENTITIES)
@@ -357,7 +173,7 @@ def extract(page):
 
   return bugs
 
-def format_markdown(bugs):
+def format_markdown(username, bugs):
   headers =['Id', 'Bugno', 'Subject', 'Reported date', 'Reported by', 'Serverity', 'Status', 'Sub', 'Re']
 
   bugs_list = []
@@ -377,7 +193,7 @@ def format_markdown(bugs):
 
   for k,v in enumerate(bugs_list):
     v.insert(0, k + 1)
-  md.write_table("", bugs_list, headers, False)
+  md.write_table(username, bugs_list, headers, False)
 
 
 def get_bugs_page(url):
@@ -411,25 +227,36 @@ def get_bugs_list(uuid, status, reported_days = '0'):
     return r.text
   except requests.exceptions.ConnectionError as e:
     print >> sys.stderr, "Get list error"
-
-#users = ("LILIHE", "LLFENG", "XIALILI", "XIALILI2", "CHUTIAN", "WENWAWAN", "WENBOLI", "SHENGZHA", "YIZZHANG", "RMIAO") #"ORZHANG"
-users = ("LLFENG", "CHUTIAN", "WENWAWAN", "HEMZHAO", "CHORNE", "MMUZIK", "ORZHANG", "MMYU", "SHENGZHA", "YIZZHANG")
+#users = ("LILIHE", "LLFENG", "XIALILI", "XIALILI2", "CHUTIAN", "WENWAWAN", "WENBOLI", "SHENGZHA", "YIZZHANG", "RMIAO") #"ORZHANG" "MMUZIK",
+users = ("LLFENG", "CHUTIAN", "WENWAWAN", "HEMZHAO", "CHORNE", "ORZHANG", "MMYU", "SHENGZHA", "YIZZHANG", "CRHU", "RMIAO", "WENBOLI", "CHENLCH", "SUXLI")
 headers_serverity=["USER", "S1", "S2", "S3", "S4"]
-headers_cata=["USER", "MPxIO", "SD/SCSA"]
+headers_cata=["USER", "MPxIO", "SD/SCSA", "iSCSI", "FC", "MISC"]
 
 mpxio_subs=("IO-MULTIPATH", "LIBMPAPI", "LIBMPSCSI_VHCI", "MPATHADM")
-sd_scsa_subs=("SD-FIXED","SCSA","SES","SSD","LIBEFI","DISKFORMAT","CMLB","LIBFDISK","SCSI","FDISK","SASINFO","SDPARM","SG3UTILS","SMPUTILS")
+sd_scsa_subs=("SD-FIXED","SCSA","SES","SSD","LIBEFI","DISKFORMAT","CMLB","LIBFDISK","SCSI","FDISK")
+iscsi_subs=("ISCSI","LIBIMA","ISNS","ISCSIADM","ISER","IDM")
+fc_subs=("FCIP","FCOE","FCP","FCSM","FC_TRANSPORT","CFGADM_FP","LIBA5K","LIBG_FC","LIBHBAAPI","LIBSUN_FC","FCINFO","LUXADM","NPIV")
+misc_subs=("LIBSUN_SAS","SASINFO","SDPARM","SG3UTILS","SMPUTILS")
 
 def _stat_cata(user, bugs):
   s1 = 0
   s2 = 0
+  s3 = 0
+  s4 = 0
+  s5 = 0
 
   for bug in bugs:
     if bug["subcomponent"].encode('utf8') in mpxio_subs:
       s1 = s1 + 1
     elif bug["subcomponent"].encode('utf8') in sd_scsa_subs:
       s2 = s2 + 1
-  return [user, s1, s2]
+    elif bug["subcomponent"].encode('utf8') in iscsi_subs:
+      s3 = s3 + 1
+    elif bug["subcomponent"].encode('utf8') in fc_subs:
+      s4 = s4 + 1
+    elif bug["subcomponent"].encode('utf8') in misc_subs:
+      s5 = s5 + 1
+  return [user, s1, s2, s3, s4, s5]
 
 def _stat_serv(user, bugs):
   s1 = 0
@@ -459,9 +286,7 @@ def report_new_bugs_one_week():
   stats1 = []
   stats2 = []
   for user in users:
-    out = "\n%s\n--------------\n" % (user, )
-    print >> sys.stderr, out
-    md.write(out)
+    print >> sys.stderr, user
 
     url = "https://bug.oraclecorp.com/pls/bug/WEBBUG_REPORTS.do_edit_report?rpt_title=&fcont_arr=0&fid_arr=43&fcont_arr=60&fid_arr=42&fcont_arr=%3D&fid_arr=159&fcont_arr=" + user + "&fid_arr=6&fcont_arr=&fid_arr=122&fcont_arr=AND&fid_arr=136&fcont_arr=&fid_arr=138&fcont_arr=7&fid_arr=9&fcont_arr=INTERNAL%25&fid_arr=200&fcont_arr=&fid_arr=10&fcont_arr=off&fid_arr=157&fcont_arr=2&fid_arr=100&cid_arr=2&cid_arr=3&cid_arr=14&cid_arr=9&cid_arr=8&cid_arr=7&cid_arr=11&cid_arr=6&cid_arr=15&cid_arr=5&cid_arr=51&cid_arr=13&f_count=12&c_count=12&query_type=2"
 
@@ -470,7 +295,7 @@ def report_new_bugs_one_week():
     bugs = extract(get_bugs_page(url))
     stats1.append(_stat_serv(user, bugs))
     stats2.append(_stat_cata(user, bugs))
-    format_markdown(bugs)
+    format_markdown(user, bugs)
 
   md.write_table("Serverity Summary", stats1, headers_serverity, True)
   md.write_table("User Summary", stats2, headers_cata, True)
@@ -484,10 +309,7 @@ def staff_bugs_all():
   stats1 = []
   stats2 = []
   for user in users:
-    out = "\n%s\n--------------\n" % (user, )
-    print >> sys.stderr, out
-    md.write(out)
-
+    print >> sys.stderr, user
     url ="https://bug.oraclecorp.com/pls/bug/WEBBUG_REPORTS.do_edit_report?rpt_title=&fcont_arr=0&fid_arr=43&fcont_arr=60&fid_arr=42&fcont_arr=%3D&fid_arr=159&fcont_arr=" + user + "&fid_arr=6&fcont_arr=&fid_arr=122&fcont_arr=AND&fid_arr=136&fcont_arr=&fid_arr=138&fcont_arr=INTERNAL%25&fid_arr=200&fcont_arr=off&fid_arr=157&cid_arr=2&cid_arr=3&cid_arr=14&cid_arr=9&cid_arr=8&cid_arr=7&cid_arr=11&cid_arr=6&cid_arr=15&cid_arr=5&cid_arr=51&cid_arr=13&f_count=9&c_count=12&query_type=2"
 
 # url = "https://bug.oraclecorp.com/pls/bug/WEBBUG_REPORTS.do_edit_report?rpt_title=&fcont_arr=9&fid_arr=43&fcont_arr=60&fid_arr=42&fcont_arr=%3D&fid_arr=159&fcont_arr=" + user + "&fid_arr=6&fcont_arr=&fid_arr=122&fcont_arr=AND&fid_arr=136&fcont_arr=&fid_arr=138&fcont_arr=INTERNAL%25&fid_arr=200&fcont_arr=off&fid_arr=157&fcont_arr=2&fid_arr=100&cid_arr=2&cid_arr=15&cid_arr=3&cid_arr=9&cid_arr=8&cid_arr=7&cid_arr=30&cid_arr=11&cid_arr=6&cid_arr=5&cid_arr=51&cid_arr=13&f_count=10&c_count=12&query_type=2"
@@ -495,7 +317,7 @@ def staff_bugs_all():
     bugs = extract(get_bugs_page(url))
     stats1.append(_stat_serv(user, bugs))
     stats2.append(_stat_cata(user, bugs))
-    format_markdown(bugs)
+    format_markdown(user, bugs)
 
 
   md.write_table("Serverity Summary", stats1, headers_serverity, True)
@@ -537,9 +359,7 @@ def staff_completed_one_week():
   stats1 = []
   stats2 = []
   for user in users:
-    out="\n%s\n--------------\n" % (user, )
-    print >> sys.stderr, out
-    md.write(out)
+    print >> sys.stderr, user
     ''' use fixed col from bugdb'''
     url = "https://bug.oraclecorp.com/pls/bug/WEBBUG_REPORTS.do_edit_report?rpt_title=&fcont_arr=70&fid_arr=43&fcont_arr=100&fid_arr=42&fcont_arr=%3D&fid_arr=159&fcont_arr=" + user + "&fid_arr=6&fcont_arr=&fid_arr=122&fcont_arr=AND&fid_arr=136&fcont_arr=&fid_arr=138&fcont_arr=7&fid_arr=47&fcont_arr=INTERNAL%25&fid_arr=200&fcont_arr=&fid_arr=10&fcont_arr=off&fid_arr=157&fcont_arr=2&fid_arr=100&cid_arr=2&cid_arr=3&cid_arr=14&cid_arr=9&cid_arr=8&cid_arr=7&cid_arr=11&cid_arr=6&cid_arr=15&cid_arr=5&cid_arr=51&cid_arr=13&f_count=12&c_count=12&query_type=2"
 
@@ -551,7 +371,7 @@ def staff_completed_one_week():
     bugs.extend(extract(get_bugs_page(url)))
     stats1.append(_stat_serv(user, bugs))
     stats2.append(_stat_cata(user, bugs))
-    format_markdown(bugs)
+    format_markdown(user, bugs)
 
   md.write_table("Serverity Summary", stats1, headers_serverity, True)
   md.write_table("User Summary", stats2, headers_cata, True)
