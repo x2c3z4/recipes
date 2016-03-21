@@ -163,7 +163,7 @@ def extract(page):
     # useful
     bug["reported_date"] = tmp[-11]
     bug["reported_by"] = tmp[-10]
-    bug["serverity"] = tmp[-8]
+    bug["severity"] = tmp[-8]
     bug["status"] = tmp[-7]
     bug["subcomponent"] = tmp[-4]
     bug["re"] = tmp[-2]
@@ -174,7 +174,7 @@ def extract(page):
   return bugs
 
 def format_markdown(username, bugs):
-  headers =['Id', 'Bugno', 'Subject', 'Reported date', 'Reported by', 'Serverity', 'Status', 'Sub', 'Re']
+  headers =['No', 'BugID', 'Subject', 'Reported date', 'Reported by', 'Severity', 'Status', 'Sub', 'Re']
 
   bugs_list = []
   for bug in bugs:
@@ -183,7 +183,7 @@ def format_markdown(username, bugs):
     bug_list.append(bug["subject"])
     bug_list.append(bug["reported_date"])
     bug_list.append(bug["reported_by"])
-    bug_list.append(bug["serverity"])
+    bug_list.append(bug["severity"])
     bug_list.append(bug["status"])
     bug_list.append(bug["subcomponent"])
     bug_list.append(bug["re"])
@@ -229,7 +229,7 @@ def get_bugs_list(uuid, status, reported_days = '0'):
     print >> sys.stderr, "Get list error"
 #users = ("LILIHE", "LLFENG", "XIALILI", "XIALILI2", "CHUTIAN", "WENWAWAN", "WENBOLI", "SHENGZHA", "YIZZHANG", "RMIAO") #"ORZHANG" "MMUZIK",
 users = ("LLFENG", "CHUTIAN", "WENWAWAN", "HEMZHAO", "CHORNE", "ORZHANG", "MMYU", "SHENGZHA", "YIZZHANG", "CRHU", "RMIAO", "WENBOLI", "CHENLCH", "SUXLI")
-headers_serverity=["USER", "S1", "S2", "S3", "S4"]
+headers_severity=["USER", "S1", "S2", "S3", "S4"]
 headers_cata=["USER", "MPxIO", "SD/SCSA", "iSCSI", "FC", "MISC"]
 
 mpxio_subs=("IO-MULTIPATH", "LIBMPAPI", "LIBMPSCSI_VHCI", "MPATHADM")
@@ -265,7 +265,7 @@ def _stat_serv(user, bugs):
   s4 = 0
 
   for bug in bugs:
-    ch = bug["serverity"].encode('utf8')
+    ch = bug["severity"].encode('utf8')
     if ch is '1':
       s1 = s1 + 1
     elif ch is '2':
@@ -297,11 +297,11 @@ def report_new_bugs_one_week():
     stats2.append(_stat_cata(user, bugs))
     format_markdown(user, bugs)
 
-  md.write_table("Serverity Summary", stats1, headers_serverity, True)
+  md.write_table("Severity Summary", stats1, headers_severity, True)
   md.write_table("User Summary", stats2, headers_cata, True)
 
 def staff_bugs_all():
-  out = "\nUnsolve bugs(%s)\n=================\n" % (
+  out = "\nUnresolved bugs(%s)\n=================\n" % (
           strftime("%Y-%m-%d", gmtime()),)
   print >> sys.stderr, out
   md.write(out)
@@ -320,7 +320,7 @@ def staff_bugs_all():
     format_markdown(user, bugs)
 
 
-  md.write_table("Serverity Summary", stats1, headers_serverity, True)
+  md.write_table("Severity Summary", stats1, headers_severity, True)
   md.write_table("User Summary", stats2, headers_cata, True)
 
 
@@ -373,7 +373,7 @@ def staff_completed_one_week():
     stats2.append(_stat_cata(user, bugs))
     format_markdown(user, bugs)
 
-  md.write_table("Serverity Summary", stats1, headers_serverity, True)
+  md.write_table("Severity Summary", stats1, headers_severity, True)
   md.write_table("User Summary", stats2, headers_cata, True)
 
 
