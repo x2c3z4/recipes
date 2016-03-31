@@ -1,0 +1,5 @@
+config HELLO
+	tristate "hello char device driver"
+	default y
+	help
+        my hello happy

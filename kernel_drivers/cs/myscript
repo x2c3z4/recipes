@@ -1,0 +1,33 @@
+#!/bin/sh
+#
+# myscript -- extracts the address of the 'sys_call_table[]' 
+# from the 'System.map' file for the current kernel version
+# and uses it as the module-parameter value for 'svctable'
+# when it installs our 'myexport' module
+#
+# MODIFICATION: Changed this script so that it extracts the 
+# 'sys_call_table[]' address directly from the uncompressed 
+# kernel binary ('vmlinux'), using the 'objdump' and 'grep'
+# command-line tools, but retained the previous extraction-
+# statements as comments, in case we want to revert later.  
+#
+# programmer: ALLAN CRUSE
+# written on: 24 JUN 2004
+# revised on: 09 MAY 2005 -- for Linux kernel version 2.6.10
+#
+version=$(uname -r) 
+# mapfile=/boot/System.map-$version
+# echo $mapfile
+srcfile=/usr/src/linux/vmlinux
+echo $srcfile
+
+# address=$(grep sys_call_table $mapfile | cut -c0-8)
+# echo $address
+address=$(objdump -t $srcfile | grep sys_call_table | cut -c0-8)
+echo $address
+
+argument="svctable=$address"
+echo $argument
+
+/sbin/insmod myexport.ko $argument
+

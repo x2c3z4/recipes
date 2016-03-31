@@ -1,0 +1,316 @@
+In file included from include/linux/types.h:4,
+                 from include/linux/list.h:4,
+                 from include/linux/module.h:9,
+                 from /home/vonnyfly/shared/test-proc/proc_test.c:2:
+/usr/src/linux-headers-3.0.0-12-generic/arch/arm/include/asm/types.h:17:1: warning: "BITS_PER_LONG" redefined
+In file included from /usr/src/linux-headers-3.0.0-12-generic/arch/arm/include/asm/bitsperlong.h:1,
+                 from include/asm-generic/int-ll64.h:11,
+                 from /usr/src/linux-headers-3.0.0-12-generic/arch/arm/include/asm/types.h:4,
+                 from include/linux/types.h:4,
+                 from include/linux/list.h:4,
+                 from include/linux/module.h:9,
+                 from /home/vonnyfly/shared/test-proc/proc_test.c:2:
+include/asm-generic/bitsperlong.h:18:1: warning: this is the location of the previous definition
+In file included from include/linux/module.h:9,
+                 from /home/vonnyfly/shared/test-proc/proc_test.c:2:
+include/linux/list.h: In function 'list_del':
+include/linux/list.h:107: warning: integer constant is too large for 'unsigned long' type
+include/linux/list.h:108: warning: integer constant is too large for 'unsigned long' type
+include/linux/list.h: In function 'hlist_del':
+include/linux/list.h:598: warning: integer constant is too large for 'unsigned long' type
+include/linux/list.h:599: warning: integer constant is too large for 'unsigned long' type
+In file included from include/linux/irqflags.h:15,
+                 from /usr/src/linux-headers-3.0.0-12-generic/arch/arm/include/asm/system.h:61,
+                 from /usr/src/linux-headers-3.0.0-12-generic/arch/arm/include/asm/bitops.h:27,
+                 from include/linux/bitops.h:22,
+                 from include/linux/kernel.h:17,
+                 from include/linux/cache.h:4,
+                 from include/linux/time.h:7,
+                 from include/linux/stat.h:60,
+                 from include/linux/module.h:10,
+                 from /home/vonnyfly/shared/test-proc/proc_test.c:2:
+/usr/src/linux-headers-3.0.0-12-generic/arch/arm/include/asm/irqflags.h:11:5: warning: "__LINUX_ARM_ARCH__" is not defined
+In file included from /usr/src/linux-headers-3.0.0-12-generic/arch/arm/include/asm/bitops.h:27,
+                 from include/linux/bitops.h:22,
+                 from include/linux/kernel.h:17,
+                 from include/linux/cache.h:4,
+                 from include/linux/time.h:7,
+                 from include/linux/stat.h:60,
+                 from include/linux/module.h:10,
+                 from /home/vonnyfly/shared/test-proc/proc_test.c:2:
+/usr/src/linux-headers-3.0.0-12-generic/arch/arm/include/asm/system.h:121:5: warning: "__LINUX_ARM_ARCH__" is not defined
+/usr/src/linux-headers-3.0.0-12-generic/arch/arm/include/asm/system.h:127:5: warning: "__LINUX_ARM_ARCH__" is not defined
+/usr/src/linux-headers-3.0.0-12-generic/arch/arm/include/asm/system.h:128:3: warning: "__LINUX_ARM_ARCH__" is not defined
+/usr/src/linux-headers-3.0.0-12-generic/arch/arm/include/asm/system.h:134:5: warning: "__LINUX_ARM_ARCH__" is not defined
+/usr/src/linux-headers-3.0.0-12-generic/arch/arm/include/asm/system.h:138:35: warning: "__LINUX_ARM_ARCH__" is not defined
+/usr/src/linux-headers-3.0.0-12-generic/arch/arm/include/asm/system.h:272:5: warning: "__LINUX_ARM_ARCH__" is not defined
+/usr/src/linux-headers-3.0.0-12-generic/arch/arm/include/asm/system.h:279:5: warning: "__LINUX_ARM_ARCH__" is not defined
+/usr/src/linux-headers-3.0.0-12-generic/arch/arm/include/asm/system.h:349:5: warning: "__LINUX_ARM_ARCH__" is not defined
+/usr/src/linux-headers-3.0.0-12-generic/arch/arm/include/asm/system.h:353:2: error: #error "SMP is not supported on this platform"
+In file included from include/linux/bitops.h:22,
+                 from include/linux/kernel.h:17,
+                 from include/linux/cache.h:4,
+                 from include/linux/time.h:7,
+                 from include/linux/stat.h:60,
+                 from include/linux/module.h:10,
+                 from /home/vonnyfly/shared/test-proc/proc_test.c:2:
+/usr/src/linux-headers-3.0.0-12-generic/arch/arm/include/asm/bitops.h:217:5: warning: "__LINUX_ARM_ARCH__" is not defined
+In file included from include/linux/swab.h:6,
+                 from include/linux/byteorder/little_endian.h:12,
+                 from /usr/src/linux-headers-3.0.0-12-generic/arch/arm/include/asm/byteorder.h:21,
+                 from include/asm-generic/bitops/le.h:5,
+                 from /usr/src/linux-headers-3.0.0-12-generic/arch/arm/include/asm/bitops.h:308,
+                 from include/linux/bitops.h:22,
+                 from include/linux/kernel.h:17,
+                 from include/linux/cache.h:4,
+                 from include/linux/time.h:7,
+                 from include/linux/stat.h:60,
+                 from include/linux/module.h:10,
+                 from /home/vonnyfly/shared/test-proc/proc_test.c:2:
+/usr/src/linux-headers-3.0.0-12-generic/arch/arm/include/asm/swab.h:25:28: warning: "__LINUX_ARM_ARCH__" is not defined
+In file included from /usr/src/linux-headers-3.0.0-12-generic/arch/arm/include/asm/thread_info.h:16,
+                 from include/linux/thread_info.h:53,
+                 from include/linux/preempt.h:9,
+                 from include/linux/spinlock.h:50,
+                 from include/linux/seqlock.h:29,
+                 from include/linux/time.h:8,
+                 from include/linux/stat.h:60,
+                 from include/linux/module.h:10,
+                 from /home/vonnyfly/shared/test-proc/proc_test.c:2:
+/usr/src/linux-headers-3.0.0-12-generic/arch/arm/include/asm/fpstate.h:32:5: warning: "__LINUX_ARM_ARCH__" is not defined
+In file included from include/linux/spinlock.h:87,
+                 from include/linux/seqlock.h:29,
+                 from include/linux/time.h:8,
+                 from include/linux/stat.h:60,
+                 from include/linux/module.h:10,
+                 from /home/vonnyfly/shared/test-proc/proc_test.c:2:
+/usr/src/linux-headers-3.0.0-12-generic/arch/arm/include/asm/spinlock.h:4:5: warning: "__LINUX_ARM_ARCH__" is not defined
+/usr/src/linux-headers-3.0.0-12-generic/arch/arm/include/asm/spinlock.h:5:2: error: #error SMP not supported on pre-ARMv6 CPUs
+In file included from /usr/src/linux-headers-3.0.0-12-generic/arch/arm/include/asm/spinlock.h:8,
+                 from include/linux/spinlock.h:87,
+                 from include/linux/seqlock.h:29,
+                 from include/linux/time.h:8,
+                 from include/linux/stat.h:60,
+                 from include/linux/module.h:10,
+                 from /home/vonnyfly/shared/test-proc/proc_test.c:2:
+/usr/src/linux-headers-3.0.0-12-generic/arch/arm/include/asm/processor.h:86:5: warning: "__LINUX_ARM_ARCH__" is not defined
+/usr/src/linux-headers-3.0.0-12-generic/arch/arm/include/asm/processor.h:106:5: warning: "__LINUX_ARM_ARCH__" is not defined
+In file included from include/linux/spinlock.h:87,
+                 from include/linux/seqlock.h:29,
+                 from include/linux/time.h:8,
+                 from include/linux/stat.h:60,
+                 from include/linux/module.h:10,
+                 from /home/vonnyfly/shared/test-proc/proc_test.c:2:
+/usr/src/linux-headers-3.0.0-12-generic/arch/arm/include/asm/spinlock.h:47:5: warning: "__LINUX_ARM_ARCH__" is not defined
+In file included from include/linux/spinlock.h:387,
+                 from include/linux/seqlock.h:29,
+                 from include/linux/time.h:8,
+                 from include/linux/stat.h:60,
+                 from include/linux/module.h:10,
+                 from /home/vonnyfly/shared/test-proc/proc_test.c:2:
+/usr/src/linux-headers-3.0.0-12-generic/arch/arm/include/asm/atomic.h:30:5: warning: "__LINUX_ARM_ARCH__" is not defined
+/usr/src/linux-headers-3.0.0-12-generic/arch/arm/include/asm/atomic.h:153:2: error: #error SMP not supported on pre-ARMv6 CPUs
+In file included from include/linux/spinlock.h:387,
+                 from include/linux/seqlock.h:29,
+                 from include/linux/time.h:8,
+                 from include/linux/stat.h:60,
+                 from include/linux/module.h:10,
+                 from /home/vonnyfly/shared/test-proc/proc_test.c:2:
+/usr/src/linux-headers-3.0.0-12-generic/arch/arm/include/asm/atomic.h: At top level:
+/usr/src/linux-headers-3.0.0-12-generic/arch/arm/include/asm/atomic.h:241: error: conflicting types for 'atomic64_t'
+include/linux/types.h:219: note: previous declaration of 'atomic64_t' was here
+In file included from include/linux/time.h:9,
+                 from include/linux/stat.h:60,
+                 from include/linux/module.h:10,
+                 from /home/vonnyfly/shared/test-proc/proc_test.c:2:
+include/linux/math64.h: In function 'div_u64_rem':
+include/linux/math64.h:51: error: '__LINUX_ARM_ARCH__' undeclared (first use in this function)
+include/linux/math64.h:51: error: (Each undeclared identifier is reported only once
+include/linux/math64.h:51: error: for each function it appears in.)
+In file included from include/linux/mmzone.h:20,
+                 from include/linux/gfp.h:4,
+                 from include/linux/kmod.h:22,
+                 from include/linux/module.h:13,
+                 from /home/vonnyfly/shared/test-proc/proc_test.c:2:
+/usr/src/linux-headers-3.0.0-12-generic/arch/arm/include/asm/page.h:116:2: error: #error Unknown user operations model
+In file included from /usr/src/linux-headers-3.0.0-12-generic/arch/arm/include/asm/page.h:204,
+                 from include/linux/mmzone.h:20,
+                 from include/linux/gfp.h:4,
+                 from include/linux/kmod.h:22,
+                 from include/linux/module.h:13,
+                 from /home/vonnyfly/shared/test-proc/proc_test.c:2:
+/usr/src/linux-headers-3.0.0-12-generic/arch/arm/include/asm/memory.h:19:25: error: mach/memory.h: No such file or directory
+/usr/src/linux-headers-3.0.0-12-generic/arch/arm/include/asm/memory.h:55:1: warning: "CONFIG_PAGE_OFFSETUL" is not defined
+/usr/src/linux-headers-3.0.0-12-generic/arch/arm/include/asm/memory.h:55:1: warning: "CONFIG_PAGE_OFFSETUL" is not defined
+/usr/src/linux-headers-3.0.0-12-generic/arch/arm/include/asm/memory.h:49:46: warning: the right operand of ">" changes sign when promoted
+In file included from /usr/src/linux-headers-3.0.0-12-generic/arch/arm/include/asm/page.h:204,
+                 from include/linux/mmzone.h:20,
+                 from include/linux/gfp.h:4,
+                 from include/linux/kmod.h:22,
+                 from include/linux/module.h:13,
+                 from /home/vonnyfly/shared/test-proc/proc_test.c:2:
+/usr/src/linux-headers-3.0.0-12-generic/arch/arm/include/asm/memory.h: In function 'virt_to_phys':
+/usr/src/linux-headers-3.0.0-12-generic/arch/arm/include/asm/memory.h:236: error: 'CONFIG_PAGE_OFFSETUL' undeclared (first use in this function)
+/usr/src/linux-headers-3.0.0-12-generic/arch/arm/include/asm/memory.h:236: error: 'PLAT_PHYS_OFFSET' undeclared (first use in this function)
+/usr/src/linux-headers-3.0.0-12-generic/arch/arm/include/asm/memory.h: In function 'phys_to_virt':
+/usr/src/linux-headers-3.0.0-12-generic/arch/arm/include/asm/memory.h:241: error: 'PLAT_PHYS_OFFSET' undeclared (first use in this function)
+/usr/src/linux-headers-3.0.0-12-generic/arch/arm/include/asm/memory.h:241: error: 'CONFIG_PAGE_OFFSETUL' undeclared (first use in this function)
+/usr/src/linux-headers-3.0.0-12-generic/arch/arm/include/asm/memory.h: In function 'virt_to_bus':
+/usr/src/linux-headers-3.0.0-12-generic/arch/arm/include/asm/memory.h:266: error: 'CONFIG_PAGE_OFFSETUL' undeclared (first use in this function)
+/usr/src/linux-headers-3.0.0-12-generic/arch/arm/include/asm/memory.h:266: error: 'PLAT_PHYS_OFFSET' undeclared (first use in this function)
+/usr/src/linux-headers-3.0.0-12-generic/arch/arm/include/asm/memory.h: In function 'bus_to_virt':
+/usr/src/linux-headers-3.0.0-12-generic/arch/arm/include/asm/memory.h:271: error: 'PLAT_PHYS_OFFSET' undeclared (first use in this function)
+/usr/src/linux-headers-3.0.0-12-generic/arch/arm/include/asm/memory.h:271: error: 'CONFIG_PAGE_OFFSETUL' undeclared (first use in this function)
+In file included from include/linux/gfp.h:4,
+                 from include/linux/kmod.h:22,
+                 from include/linux/module.h:13,
+                 from /home/vonnyfly/shared/test-proc/proc_test.c:2:
+include/linux/mmzone.h: At top level:
+include/linux/mmzone.h:73: error: 'CONFIG_ARM_L1_CACHE_SHIFT' undeclared here (not in a function)
+include/linux/mmzone.h:73: error: requested alignment is not a constant
+include/linux/mmzone.h:417: error: requested alignment is not a constant
+In file included from include/linux/notifier.h:14,
+                 from include/linux/memory_hotplug.h:6,
+                 from include/linux/mmzone.h:657,
+                 from include/linux/gfp.h:4,
+                 from include/linux/kmod.h:22,
+                 from include/linux/module.h:13,
+                 from /home/vonnyfly/shared/test-proc/proc_test.c:2:
+include/linux/rwsem.h:41:23: error: asm/rwsem.h: No such file or directory
+In file included from include/linux/gfp.h:4,
+                 from include/linux/kmod.h:22,
+                 from include/linux/module.h:13,
+                 from /home/vonnyfly/shared/test-proc/proc_test.c:2:
+include/linux/mmzone.h:794:24: error: asm/mmzone.h: No such file or directory
+In file included from include/linux/mmzone.h:918,
+                 from include/linux/gfp.h:4,
+                 from include/linux/kmod.h:22,
+                 from include/linux/module.h:13,
+                 from /home/vonnyfly/shared/test-proc/proc_test.c:2:
+/usr/src/linux-headers-3.0.0-12-generic/arch/arm/include/asm/sparsemem.h:21:2: error: #error Sparsemem is not supported on this platform
+In file included from include/linux/gfp.h:4,
+                 from include/linux/kmod.h:22,
+                 from include/linux/module.h:13,
+                 from /home/vonnyfly/shared/test-proc/proc_test.c:2:
+include/linux/mmzone.h:954:36: warning: "SECTION_SIZE_BITS" is not defined
+include/linux/mmzone.h:955:2: error: #error Allocator MAX_ORDER exceeds SECTION_SIZE
+In file included from include/linux/gfp.h:4,
+                 from include/linux/kmod.h:22,
+                 from include/linux/module.h:13,
+                 from /home/vonnyfly/shared/test-proc/proc_test.c:2:
+include/linux/mmzone.h:1004: error: 'MAX_PHYSMEM_BITS' undeclared here (not in a function)
+include/linux/mmzone.h:1004: error: 'SECTION_SIZE_BITS' undeclared here (not in a function)
+In file included from include/linux/gfp.h:7,
+                 from include/linux/kmod.h:22,
+                 from include/linux/module.h:13,
+                 from /home/vonnyfly/shared/test-proc/proc_test.c:2:
+include/linux/topology.h:212:2: error: #error Please define an appropriate SD_NODE_INIT in include/asm/topology.h!!!
+In file included from include/linux/kmod.h:22,
+                 from include/linux/module.h:13,
+                 from /home/vonnyfly/shared/test-proc/proc_test.c:2:
+include/linux/gfp.h: In function 'node_zonelist':
+include/linux/gfp.h:282: error: implicit declaration of function 'NODE_DATA'
+include/linux/gfp.h:282: error: invalid type argument of '->' (have 'int')
+In file included from include/linux/timex.h:174,
+                 from include/linux/jiffies.h:8,
+                 from include/linux/ktime.h:25,
+                 from include/linux/timer.h:5,
+                 from include/linux/workqueue.h:8,
+                 from include/linux/kmod.h:26,
+                 from include/linux/module.h:13,
+                 from /home/vonnyfly/shared/test-proc/proc_test.c:2:
+/usr/src/linux-headers-3.0.0-12-generic/arch/arm/include/asm/timex.h:15:24: error: mach/timex.h: No such file or directory
+In file included from include/linux/ktime.h:25,
+                 from include/linux/timer.h:5,
+                 from include/linux/workqueue.h:8,
+                 from include/linux/kmod.h:26,
+                 from include/linux/module.h:13,
+                 from /home/vonnyfly/shared/test-proc/proc_test.c:2:
+include/linux/jiffies.h:257:31: warning: "CLOCK_TICK_RATE" is not defined
+include/linux/jiffies.h:257:31: warning: "CLOCK_TICK_RATE" is not defined
+include/linux/jiffies.h:257:31: error: division by zero in #if
+include/linux/jiffies.h:257:31: warning: "CLOCK_TICK_RATE" is not defined
+include/linux/jiffies.h:257:31: warning: "CLOCK_TICK_RATE" is not defined
+include/linux/jiffies.h:257:31: error: division by zero in #if
+include/linux/jiffies.h:257:31: warning: "CLOCK_TICK_RATE" is not defined
+include/linux/jiffies.h:257:31: warning: "CLOCK_TICK_RATE" is not defined
+include/linux/jiffies.h:257:31: error: division by zero in #if
+include/linux/jiffies.h:257:31: error: division by zero in #if
+include/linux/jiffies.h:257:31: warning: "CLOCK_TICK_RATE" is not defined
+include/linux/jiffies.h:257:31: warning: "CLOCK_TICK_RATE" is not defined
+include/linux/jiffies.h:257:31: error: division by zero in #if
+include/linux/jiffies.h:257:31: warning: "CLOCK_TICK_RATE" is not defined
+include/linux/jiffies.h:257:31: warning: "CLOCK_TICK_RATE" is not defined
+include/linux/jiffies.h:257:31: error: division by zero in #if
+include/linux/jiffies.h:257:31: warning: "CLOCK_TICK_RATE" is not defined
+include/linux/jiffies.h:257:31: warning: "CLOCK_TICK_RATE" is not defined
+include/linux/jiffies.h:257:31: error: division by zero in #if
+include/linux/jiffies.h:257:31: error: division by zero in #if
+include/linux/jiffies.h:257:31: warning: "CLOCK_TICK_RATE" is not defined
+include/linux/jiffies.h:257:31: warning: "CLOCK_TICK_RATE" is not defined
+include/linux/jiffies.h:257:31: error: division by zero in #if
+include/linux/jiffies.h:257:31: warning: "CLOCK_TICK_RATE" is not defined
+include/linux/jiffies.h:257:31: warning: "CLOCK_TICK_RATE" is not defined
+include/linux/jiffies.h:257:31: error: division by zero in #if
+include/linux/jiffies.h:257:31: warning: "CLOCK_TICK_RATE" is not defined
+include/linux/jiffies.h:257:31: warning: "CLOCK_TICK_RATE" is not defined
+include/linux/jiffies.h:257:31: error: division by zero in #if
+include/linux/jiffies.h:257:31: warning: "CLOCK_TICK_RATE" is not defined
+include/linux/jiffies.h:257:31: warning: "CLOCK_TICK_RATE" is not defined
+include/linux/jiffies.h:257:31: error: division by zero in #if
+include/linux/jiffies.h:257:31: warning: "CLOCK_TICK_RATE" is not defined
+include/linux/jiffies.h:257:31: warning: "CLOCK_TICK_RATE" is not defined
+include/linux/jiffies.h:257:31: error: division by zero in #if
+include/linux/jiffies.h:257:31: warning: "CLOCK_TICK_RATE" is not defined
+include/linux/jiffies.h:257:31: warning: "CLOCK_TICK_RATE" is not defined
+include/linux/jiffies.h:257:31: error: division by zero in #if
+include/linux/jiffies.h:257:31: error: division by zero in #if
+In file included from include/linux/slab.h:165,
+                 from include/linux/proc_fs.h:4,
+                 from /home/vonnyfly/shared/test-proc/proc_test.c:4:
+include/linux/slub_def.h:108:35: warning: "CONFIG_ARM_L1_CACHE_SHIFT" is not defined
+In file included from include/linux/dcache.h:6,
+                 from include/linux/fs.h:381,
+                 from include/linux/proc_fs.h:5,
+                 from /home/vonnyfly/shared/test-proc/proc_test.c:4:
+include/linux/rculist.h: In function 'list_del_rcu':
+include/linux/rculist.h:112: warning: integer constant is too large for 'unsigned long' type
+include/linux/rculist.h: In function 'list_replace_rcu':
+include/linux/rculist.h:158: warning: integer constant is too large for 'unsigned long' type
+include/linux/rculist.h: In function 'hlist_del_rcu':
+include/linux/rculist.h:312: warning: integer constant is too large for 'unsigned long' type
+include/linux/rculist.h: In function 'hlist_replace_rcu':
+include/linux/rculist.h:332: warning: integer constant is too large for 'unsigned long' type
+In file included from include/linux/rculist_bl.h:7,
+                 from include/linux/dcache.h:7,
+                 from include/linux/fs.h:381,
+                 from include/linux/proc_fs.h:5,
+                 from /home/vonnyfly/shared/test-proc/proc_test.c:4:
+include/linux/list_bl.h: In function 'hlist_bl_del':
+include/linux/list_bl.h:106: warning: integer constant is too large for 'unsigned long' type
+include/linux/list_bl.h:107: warning: integer constant is too large for 'unsigned long' type
+In file included from include/linux/dcache.h:7,
+                 from include/linux/fs.h:381,
+                 from include/linux/proc_fs.h:5,
+                 from /home/vonnyfly/shared/test-proc/proc_test.c:4:
+include/linux/rculist_bl.h: In function 'hlist_bl_del_rcu':
+include/linux/rculist_bl.h:76: warning: integer constant is too large for 'unsigned long' type
+In file included from include/linux/fs.h:381,
+                 from include/linux/proc_fs.h:5,
+                 from /home/vonnyfly/shared/test-proc/proc_test.c:4:
+include/linux/dcache.h: At top level:
+include/linux/dcache.h:172: error: requested alignment is not a constant
+In file included from include/linux/proc_fs.h:5,
+                 from /home/vonnyfly/shared/test-proc/proc_test.c:4:
+include/linux/fs.h:1143: warning: 'struct flock64' declared inside parameter list
+include/linux/fs.h:1143: warning: its scope is only this definition or declaration, which is probably not what you want
+include/linux/fs.h:1145: warning: 'struct flock64' declared inside parameter list
+include/linux/fs.h:1618: error: requested alignment is not a constant
+In file included from include/linux/sched.h:72,
+                 from /home/vonnyfly/shared/test-proc/proc_test.c:5:
+include/linux/sem.h:96: error: requested alignment is not a constant
+/home/vonnyfly/shared/test-proc/proc_test.c: In function 'proc_write_pid':
+/home/vonnyfly/shared/test-proc/proc_test.c:66: warning: ISO C90 forbids mixed declarations and code
+make[2]: *** [/home/vonnyfly/shared/test-proc/proc_test.o] 错误 1
+make[1]: *** [_module_/home/vonnyfly/shared/test-proc] 错误 2
+make: *** [default] 错误 2

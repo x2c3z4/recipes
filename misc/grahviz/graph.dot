@@ -1,0 +1,5 @@
+digraph test {
+
+  main [shape=ellipse]
+
+}

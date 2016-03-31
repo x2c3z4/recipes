@@ -1,0 +1,13 @@
+#!/bin/sh
+#
+# setupnic -- this script loads a kernel module named 'setupnic.ko' 
+# which will create a character-mode device-node (named '/dev/nic') 
+# with 'read+write' attributes, major-number 97 and minor-number 0.
+# The kernel-object 'setupnic.ko' must be in the current directory.
+#
+# programmer: ALLAN CRUSE
+# written on: 13 NOV 2007 
+#
+/sbin/insmod setupnic.ko 2> null
+ls -l /dev/nic
+

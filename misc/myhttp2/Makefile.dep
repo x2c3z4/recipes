@@ -1,0 +1,4 @@
+debug.o: debug.c debug.h
+httpd.o: httpd.c utils.h httpd.h
+main.o: main.c httpd.h
+utils.o: utils.c utils.h
