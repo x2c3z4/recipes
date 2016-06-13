@@ -228,7 +228,7 @@ def get_bugs_list(uuid, status, reported_days = '0'):
   except requests.exceptions.ConnectionError as e:
     print >> sys.stderr, "Get list error"
 #users = ("LILIHE", "LLFENG", "XIALILI", "XIALILI2", "CHUTIAN", "WENWAWAN", "WENBOLI", "SHENGZHA", "YIZZHANG", "RMIAO") #"ORZHANG" "MMUZIK",
-users = ("LLFENG", "CHUTIAN", "WENWAWAN", "HEMZHAO", "CHORNE", "ORZHANG", "MMYU", "SHENGZHA", "YIZZHANG", "CRHU", "RMIAO", "WENBOLI", "CHENLCH", "SUXLI")
+users = ("LLFENG", "CHUTIAN","XIALILI", "WENWAWAN", "HEMZHAO", "CHORNE", "ORZHANG", "MMYU", "SHENGZHA", "YIZZHANG", "CRHU", "RMIAO", "WENBOLI", "CHENLCH", "SUXLI")
 headers_severity=["USER", "S1", "S2", "S3", "S4"]
 headers_cata=["USER", "MPxIO", "SD/SCSA", "iSCSI", "FC", "MISC"]
 

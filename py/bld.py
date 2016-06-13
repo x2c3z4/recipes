@@ -212,6 +212,7 @@ def start_build(prj_url):
         #debugReq(r)
     except requests.exceptions.ConnectionError as e:
         print "[-] start_build error"
+        sys.exit(0)
     if r.status_code == 302:
         print "[+] Start build"
         return r.headers['Location']
