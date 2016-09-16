@@ -26,14 +26,13 @@ class Mdprint:
     self.out_base,_=os.path.splitext(output)
     self.out_md= self.out_base + ".md"
     self.out_md_fd = io.open(self.out_md, 'w+', encoding='utf8')
-    self.out_md_fd.write(u"[TOC]\n")
     atexit.register(self.save_md_html)
 
   def write(self, content):
     self.out_md_fd.write(content)
 
   def write_table(self, title, table, headers, has_stats):
-    title = "\n[%s](#)\n--------\n--------\n" % (title,)
+    title = "\n[%s](%s)\n--------\n--------\n" % (title,"http://bj.lianjia.com/ershoufang/rs%E5%AE%89%E5%A4%96%E8%8A%B1%E5%9B%AD/")
     self.write(title)
 
     if len(table) == 0:
@@ -55,7 +54,7 @@ class Mdprint:
       f.write(u'''<head>
 <meta charset="UTF-8">
 </head>''')
-      f.write(markdown.markdown(io.open(self.out_md, 'r', encoding='utf8').read(), extensions=['markdown.extensions.tables', 'markdown.extensions.toc']))
+      f.write(markdown.markdown(io.open(self.out_md, 'r', encoding='utf8').read(), extensions=['markdown.extensions.tables']))
 
 
 s = requests.Session()
@@ -134,7 +133,7 @@ def main():
     house.append(item.find("div", attrs={'class':'address'}).text)
     house.append(item.find("div", attrs={'class':'flood'}).text)
     house.append(item.find("div", attrs={'class':'followInfo'}).text)
-    house.append(item.find("div", attrs={'class':'tag'}).text)
+    #house.append(item.find("div", attrs={'class':'tag'}).text)
     house.append(item.find("div", attrs={'class':'priceInfo'}).div.text)
 
     #单价80239元/平米
@@ -144,12 +143,13 @@ def main():
     houses.append(house)
     # print house
 
-  houses_list = sorted(houses, key = lambda house: (-int(house[6])))
+  houses_list = sorted(houses, key = lambda house: (-int(house[5])))
 
-  # for k,v in enumerate(bugs_list):
-  #   v.insert(0, k + 1)
+  for k,v in enumerate(houses_list):
+    v.insert(0, k + 1)
 
-  headers = ['title', 'address', 'flood', 'follow', 'tag', 'price', 'per']
+  #headers = ['title', 'address', 'flood', 'follow', 'tag', 'price', 'per']
+  headers = ['id', 'title', 'address', 'flood', 'follow', 'price', 'per']
   md.write_table(u"安外花园", houses_list, headers, False)
 
 
