@@ -136,17 +136,21 @@ def main():
     house.append(item.find("div", attrs={'class':'followInfo'}).text)
     house.append(item.find("div", attrs={'class':'tag'}).text)
     house.append(item.find("div", attrs={'class':'priceInfo'}).div.text)
-    house.append(item.find("div", attrs={'class':'priceInfo'}).findAll('div')[1].span.text)
+
+    #单价80239元/平米
+    price_per = item.find("div", attrs={'class':'priceInfo'}).findAll('div')[1].span.text
+    price_per = int(re.search(r'\d+', price_per).group())
+    house.append(price_per)
     houses.append(house)
     # print house
 
-  # bugs_list = sorted(items, key = lambda bug_list: (int(bug_list[4]), int(bug_list[5])))
+  houses_list = sorted(houses, key = lambda house: (-int(house[6])))
 
   # for k,v in enumerate(bugs_list):
   #   v.insert(0, k + 1)
 
   headers = ['title', 'address', 'flood', 'follow', 'tag', 'price', 'per']
-  md.write_table(u"安外花园", houses, headers, False)
+  md.write_table(u"安外花园", houses_list, headers, False)
 
 
 if __name__ == "__main__":
