@@ -54,6 +54,16 @@ class Mdprint:
       f.write(u'''<head>
 <meta charset="UTF-8">
 </head>''')
+      f.write(u'''
+<style>
+table {
+border-collapse: collapse;
+}
+table td, table th {
+border: 1px solid black;
+}
+</style>
+''')
       f.write(markdown.markdown(io.open(self.out_md, 'r', encoding='utf8').read(), extensions=['markdown.extensions.tables']))
 
 
