@@ -130,7 +130,8 @@ def main():
   soup = BeautifulSoup(page, convertEntities=BeautifulSoup.HTML_ENTITIES)
   items = soup.find("ul", attrs={'class':'listContent'}).findAll('li')
   houses = []
-  for item in items:
+  #for k,item in enumerate(items[:-4]):
+  for k,item in enumerate(items):
     # house = {}
     # house['title'] = item.div.div.a.text
     # house['address'] = item.find("div", attrs={'class':'address'}).text
@@ -150,15 +151,60 @@ def main():
     price_per = item.find("div", attrs={'class':'priceInfo'}).findAll('div')[1].span.text
     price_per = int(re.search(r'\d+', price_per).group())
     house.append(price_per)
-    houses.append(house)
+    houses.append(tuple(house))
     # print house
 
-  houses_list = sorted(houses, key = lambda house: (-int(house[5])))
+  houses_list = houses
 
+
+  # load previos data from file
+  previous_houses_list = []
+  try:
+      with open('/tmp/previous.pkl', 'rb') as pickle_file:
+        previous_houses_list = pickle.load(pickle_file)
+  except:
+      print "[-] No previos data"
+  # save lists to file to compare
+  with open('/tmp/previous.pkl', 'wb') as pickle_file:
+    pickle.dump(houses_list, pickle_file, protocol=pickle.HIGHEST_PROTOCOL)
+
+  added_list = list(set(houses_list) - set(previous_houses_list))
+  deleted_list = list(set(previous_houses_list) - set(houses_list))
+  same_list = list(set(houses_list) & set(previous_houses_list))
+  #print added_list
+  #print deleted_list
+
+  tmp_added_list = []
+  tmp_deleted_list = []
+  for row in added_list:
+      row = list(row)
+      for i in range(4):
+        row[i] = '<strong><font color="red">' + row[i] + '</font></strong>'
+      tmp_added_list.append(row)
+  added_list = tmp_added_list
+
+  for row in deleted_list:
+      row = list(row)
+      for i in range(4):
+        row[i] = '<del><font color="blue">' + row[i] + '</font></del>'
+      tmp_deleted_list.append(row)
+  deleted_list = tmp_deleted_list
+
+  same_list = [list(row) for row in same_list]
+  same_list.extend(added_list)
+  same_list.extend(deleted_list)
+
+  houses_list = same_list
+
+  houses_list = sorted(houses_list, key = lambda house: (-int(house[5])))
   for k,v in enumerate(houses_list):
     v.insert(0, k + 1)
-
+  #added_list = [list("<strong>" + row[0] + "</strong>").extend(list(row[1:])) for row in added_list]
+  #deleted_list = [list("<del>" + row[0] + "</del>").extend(list(row[1:])) for row in deleted_list]
+  #print added_list
+  #print deleted_list
   #headers = ['title', 'address', 'flood', 'follow', 'tag', 'price', 'per']
+  #headers = ['id', 'title', 'address', 'flood', 'follow', 'price', 'per']
   headers = ['id', 'title', 'address', 'flood', 'follow', 'price', 'per']
   md.write_table(u"安外花园", houses_list, headers, False)
 
