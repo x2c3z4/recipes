@@ -143,7 +143,7 @@ def main():
     house.append(item.div.div.a.text)
     house.append(item.find("div", attrs={'class':'address'}).text)
     house.append(item.find("div", attrs={'class':'flood'}).text)
-    house.append(item.find("div", attrs={'class':'followInfo'}).text)
+    #house.append(item.find("div", attrs={'class':'followInfo'}).text)
     #house.append(item.find("div", attrs={'class':'tag'}).text)
     house.append(item.find("div", attrs={'class':'priceInfo'}).div.text)
 
@@ -155,6 +155,7 @@ def main():
     # print house
 
   houses_list = houses
+  n = len(houses_list)
 
 
   # load previos data from file
@@ -196,7 +197,7 @@ def main():
 
   houses_list = same_list
 
-  houses_list = sorted(houses_list, key = lambda house: (-int(house[5])))
+  houses_list = sorted(houses_list, key = lambda house: (-int(house[-1])))
   for k,v in enumerate(houses_list):
     v.insert(0, k + 1)
   #added_list = [list("<strong>" + row[0] + "</strong>").extend(list(row[1:])) for row in added_list]
@@ -206,7 +207,7 @@ def main():
   #headers = ['title', 'address', 'flood', 'follow', 'tag', 'price', 'per']
   #headers = ['id', 'title', 'address', 'flood', 'follow', 'price', 'per']
   headers = ['id', 'title', 'address', 'flood', 'follow', 'price', 'per']
-  md.write_table(u"安外花园", houses_list, headers, False)
+  md.write_table(u"安外花园(%d套)" % (n,), houses_list, headers, False)
 
 
 if __name__ == "__main__":
