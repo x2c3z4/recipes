@@ -128,7 +128,7 @@ def main():
   url = "http://bj.lianjia.com/ershoufang/rs%E5%AE%89%E5%A4%96%E8%8A%B1%E5%9B%AD/"
   page = get_page(url)
   soup = BeautifulSoup(page, convertEntities=BeautifulSoup.HTML_ENTITIES)
-  items = soup.find("ul", attrs={'class':'listContent'}).findAll('li')
+  items = soup.find("ul", attrs={'class':'sellListContent'}).findAll('li')
   houses = []
   #for k,item in enumerate(items[:-4]):
   for k,item in enumerate(items):
